@@ -1,0 +1,21 @@
+server:
+    port: 8088
+    servlet:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+
+spring:
+    application:
+        name: myWeb
+    profiles:
+        active: local
+
+
+# mybatis (MyBatisConfig.java same functions)
+mybatis:
+    mapper-locations: classpath:mapper/**/*.xml
+    type-aliases-package: com.melly.myweb
+    configuration:
+        map-underscore-to-camel-case: true
