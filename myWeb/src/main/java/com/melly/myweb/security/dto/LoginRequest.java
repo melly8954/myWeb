@@ -10,9 +10,9 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class LoginRequest extends BaseNullRequest {
     @Size(min = 5, max = 20, message = "로그인ID는 5~20자 사이여야 합니다.")
     private String loginId;

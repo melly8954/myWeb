@@ -122,6 +122,7 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
         this.userMybatisMapper.deleteById(id);
+        return true;
     }
 
     @Override
