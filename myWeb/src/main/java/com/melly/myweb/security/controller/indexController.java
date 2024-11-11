@@ -23,9 +23,13 @@ public class indexController {
 
     @GetMapping("")
     private String indexPage(Model model, @SessionAttribute(name= SecurityConfig.LOGINUSER, required = false) String nickname){
-        if( nickname != null ){
-            IUser loginUser = this.userService.findByNickname(nickname);
-            model.addAttribute(SecurityConfig.LOGINUSER,loginUser);
+        try{
+            if( nickname != null ){
+                IUser loginUser = this.userService.findByNickname(nickname);
+                model.addAttribute(SecurityConfig.LOGINUSER,loginUser);
+            }
+        }catch(Exception ex){
+            log.error(ex.toString());
         }
         return "index";
     }

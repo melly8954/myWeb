@@ -1,6 +1,7 @@
 package com.melly.myweb.security.controller;
 
 import com.melly.myweb.commons.dto.CUDInfoDto;
+import com.melly.myweb.commons.inif.IResponseController;
 import com.melly.myweb.security.dto.SignUpRequestDto;
 import com.melly.myweb.user.IUser;
 import com.melly.myweb.user.IUserService;
@@ -23,13 +24,18 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/selogin")
-public class LoginSessionController {
+public class LoginSessionController implements IResponseController {
     @Autowired
     private IUserService userService;
 
     @GetMapping("/signup")
-    private String viewSignUp(){
-        return "login/signup";
+    private String viewSignUp(Model model){
+        try {
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            return "redirect:/";
+        } catch (Exception ex) {
+            return "login/signup";
+        }
     }
 
     @PostMapping("/signup")
