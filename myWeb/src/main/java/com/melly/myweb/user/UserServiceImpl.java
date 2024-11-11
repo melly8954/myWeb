@@ -2,7 +2,7 @@ package com.melly.myweb.user;
 
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.exception.IdNotFoundException;
-import com.melly.myweb.security.dto.LoginRequest;
+import com.melly.myweb.security.dto.LoginRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,55 +17,83 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private PasswordEncoder encoder;
     @Override
-    public IUser login(LoginRequest loginRequest) {
-        if(loginRequest == null || loginRequest.getLoginId() == null || loginRequest.getPassword() == null) {
+    public IUser login(LoginRequestDto loginRequestDto) {
+        if(loginRequestDto == null || loginRequestDto.getLoginId() == null || loginRequestDto.getPassword() == null) {
             return null;
         }
-        IUser user = this.userMybatisMapper.findByLoginId(loginRequest.getLoginId());
-        if(user == null || !encoder.matches(loginRequest.getPassword(), user.getPassword())){
+        IUser user = this.userMybatisMapper.findByLoginId(loginRequestDto.getLoginId());
+        if(user == null || !encoder.matches(loginRequestDto.getPassword(), user.getPassword())){
             return null;
         }
         return user;
     }
 
     @Override
-    public Boolean changePassword(IUser dto) throws Exception {
-        return null;
+    public Boolean changePassword(IUser user) throws Exception {
+        if( user == null ){
+            return false;
+        }
+        UserDto dto = new UserDto();
+        dto.copyFields(user);
+        dto.setPassword(encoder.encode(dto.getPassword()));
+        this.userMybatisMapper.changePassword(dto);
+        return true;
     }
 
     @Override
-    public IUser findByLogin(String login) {
-        return null;
+    public IUser findByLoginId(String loginId) {
+        if ( loginId == null || loginId.isEmpty() ) {
+            return null;
+        }
+        UserDto find = this.userMybatisMapper.findByLoginId(loginId);
+        return find;
     }
 
     @Override
     public IUser findByName(String name) {
-        return null;
+        if ( name == null || name.isEmpty() ) {
+            return null;
+        }
+        UserDto find = this.userMybatisMapper.findByName(name);
+        return find;
     }
 
     @Override
     public IUser findByNickname(String nickname) {
-        return null;
+        if( nickname == null || nickname.isEmpty() ){
+            return  null;
+        }
+        return userMybatisMapper.findByNickname(nickname);
     }
 
     @Override
     public IUser findByEmail(String email) {
-        return null;
+        if ( email == null || email.isEmpty() ) {
+            return null;
+        }
+        UserDto find = this.userMybatisMapper.findByEmail(email);
+        return find;
     }
 
     @Override
     public int idCheck(String loginId) {
-        return 0;
-    }
-
-    @Override
-    public int nicknameCheck(String nickname) {
-        return 0;
+        int cnt = userMybatisMapper.idCheck(loginId);
+        System.out.println("cnt: " + cnt);
+        return cnt;
     }
 
     @Override
     public int emailCheck(String email) {
-        return 0;
+        int cnt = userMybatisMapper.emailCheck(email);
+        System.out.println("cnt: " + cnt);
+        return cnt;
+    }
+
+    @Override
+    public int nicknameCheck(String nickname) {
+        int cnt = userMybatisMapper.nicknameCheck(nickname);
+        System.out.println("cnt: " + cnt);
+        return cnt;
     }
 
 

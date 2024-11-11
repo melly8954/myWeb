@@ -1,14 +1,14 @@
 package com.melly.myweb.user;
 
 import com.melly.myweb.commons.inif.IServiceCRUD;
-import com.melly.myweb.security.dto.LoginRequest;
+import com.melly.myweb.security.dto.LoginRequestDto;
 
 public interface IUserService extends IServiceCRUD<IUser> {
-    IUser login(LoginRequest loginRequest);
+    IUser login(LoginRequestDto loginRequestDto);
 
     Boolean changePassword(IUser dto) throws Exception;
 
-    IUser findByLogin(String login);
+    IUser findByLoginId(String loginId);
     IUser findByName(String name);
     IUser findByNickname(String nickname);
     IUser findByEmail(String email);

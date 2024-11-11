@@ -22,9 +22,9 @@ public interface IUser {
     String getEmail();
     void setEmail(String email);
 
-    String getPhoto();
-    void setPhoto(String photo);
-
+//    String getPhoto();
+//    void setPhoto(String photo);
+//
 
 
     default void copyFields(IUser from){
@@ -52,9 +52,9 @@ public interface IUser {
         if( from.getEmail() != null){
             this.setEmail(from.getEmail());
         }
-        if( from.getPhoto() != null){
-            this.setPhoto(from.getPhoto());
-        }
+//        if( from.getPhoto() != null){
+//            this.setPhoto(from.getPhoto());
+//        }
     }
 
 

@@ -1,5 +1,5 @@
 server:
-    port: 8088
+    port: 8089
     servlet:
         encoding:
             charset: UTF-8
@@ -12,6 +12,18 @@ spring:
     profiles:
         active: local
 
+# mysql datetime 과 return datetime
+    jackson:
+        deserialization:
+            adjust-dates-to-context-time-zone: false
+        time-zone: Asia/Seoul
+
+# mustache
+    mustache:
+        enabled: true
+        charset: UTF-8
+        suffix": .html
+        check-template-location: true
 
 # mybatis (MyBatisConfig.java same functions)
 mybatis:
