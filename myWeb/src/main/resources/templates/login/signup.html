@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<script src = "/js/jquery-3.7.1.min.js"></script>
+<body>
+    <div>
+        <form name="signForm" method="post" action="/selogin/signup" onsubmit="return checkPost();">
+            <label for="loginId">아이디 입력 : </label>
+            <input type="text" id="loginId" name="loginId" maxlength="20"><p>
+
+            <label for="password">비밀번호 입력 : </label>
+            <input type="password" id="password" name="password" maxlength="20"><p>
+
+            <label for="checkPw">비밀번호 확인 : </label>
+            <input type="password" id="checkPw" name="checkPw" maxlength="20"><p>
+
+            <label for="name">사용자 이름 : </label>
+            <input type="text" id="name" name="name" maxlength="20"><p>
+
+            <label for="nickname">사용자 닉네임 : </label>
+            <input type="text" id="nickname" name="nickname" maxlength="20"><p>
+
+            <div class="gender-selection">
+                <p>성별</p>
+                <input type="radio" checked id="male" name="gender" value="man">
+                <label for="male" class="btn">남</label>
+                <input type="radio" id="female" name="gender" value="woman">
+                <label for="female" class="btn">여</label>
+            </div>
+
+            <label for="email">사용자 이메일 : </label>
+            <input type="text" id="email" name="email" maxlength="100"><p>
+
+            <input type="submit" value="회원가입">
+        </form>
+
+    </div>
+</body>
+<script>
+    function checkPost(){
+        if( $("#password").val() !== $("#checkPw").val() ){
+            alert("암호 확인을 해주세요.");
+            $("#checkPw").focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>

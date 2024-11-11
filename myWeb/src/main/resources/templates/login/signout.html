@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 로그아웃</title>
+</head>
+<body>
+</body>
+<script>
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+    deleteCookie("loginId");
+    document.location.href = "/";
+</script>
+</html>
