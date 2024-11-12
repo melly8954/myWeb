@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<body>
+    <div>
+        <h2>로그인</h2>
+        <form id="LoginForm" method="post" action="signin">
+            <label for="loginId">로그인 아이디 : </label>
+            <input type="text" id="loginId" name="loginId" required placeholder="ID 입력">
+            <label for="loginPw">비밀번호 : </label>
+            <input type="password" id="loginPw" name="loginPw" required placeholder="PW 입력">
+
+            <input type="submit" id="formSubmit" value="로그인">
+
+            <p class="loginForm_link">계정이 없으신가요?<a href="/selogin/signup" id="show-signup">회원가입</a></p>
+            <p class="loginForm_link">ID를 잊으셨나요?<a href="/selogin/findId" id="show-findId">ID 찾기</a></p>
+            <p class="loginForm_link">PW를 잊으셨나요?<a href="/selogin/findPw" id="show-findPw">PW 찾기</a></p>
+        </form>
+    </div>
+</body>
+<!--<script>-->
+<!--    $.login = function(){-->
+<!--        let loginId = $("#loginId").val();-->
+<!--        let loginPw = $("#loginPw").val();-->
+<!--        -->
+<!--    }-->
+<!--</script>-->
+</html>

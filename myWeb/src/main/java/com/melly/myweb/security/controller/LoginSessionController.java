@@ -2,10 +2,14 @@ package com.melly.myweb.security.controller;
 
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.inif.IResponseController;
+import com.melly.myweb.security.config.SecurityConfig;
+import com.melly.myweb.security.dto.LoginRequestDto;
 import com.melly.myweb.security.dto.SignUpRequestDto;
 import com.melly.myweb.user.IUser;
 import com.melly.myweb.user.IUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +67,42 @@ public class LoginSessionController implements IResponseController {
         return "redirect:/";
     }
 
+    @GetMapping("/login")
+    private String viewLogin(Model model){
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            return "redirect:/";
+        } catch(Exception ex){
+            return "login/login";
+        }
+    }
+
+    @PostMapping("signin")
+    private String signin(Model model, @ModelAttribute LoginRequestDto loginRequestDto, HttpServletRequest request){
+        try{
+            if(loginRequestDto == null){
+                return "redirect:/";
+            }
+            try{
+                CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+                return "redirect:/";
+            }catch (Exception ex){
+            }
+            IUser loginUser = this.userService.login(loginRequestDto);
+            if(loginUser == null){
+                model.addAttribute("message","로그인 실패(id와 pw를 확인하세요)");
+                return "login/login";
+            }
+            HttpSession session = request.getSession();
+            session.setAttribute(SecurityConfig.LOGINUSER,loginUser.getNickname());
+            session.setMaxInactiveInterval(60*60); // 세션별 유효시간 지정
+        }catch (Exception ex){
+            log.error(ex.toString());
+            model.addAttribute("message","로그인 실패, 관리자에게 문의하십시오.");
+            return "login/login";
+        }
+        return "redirect:/";
+    }
     @GetMapping("/logout")
     private String logout(HttpServletResponse response){
         // /logout 은 스프링 security 에서 처리하므로 이쪽 url 로 오지 않음
