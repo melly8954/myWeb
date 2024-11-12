@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <link rel="stylesheet" href="/css/signup.css">
 </head>
 <script src = "/js/jquery-3.7.1.min.js"></script>
 <body>
     <div>
         <form name="signForm" method="post" action="/selogin/signup" onsubmit="return checkPost();">
-            <label for="loginId">아이디 입력 : </label>
-            <input type="text" id="loginId" name="loginId" maxlength="20">
-            <button class = "loginIdCheckButton" type="button" onclick="checkId()">중복 확인</button><p>
+            <div>
+                <label for="loginId">아이디 입력 : </label>
+                <input type="text" id="loginId" name="loginId" maxlength="20">
+                <button class = "loginIdCheckButton" type="button" onclick="checkId()">중복 확인</button><p>
+                <span id="loginId_ok" class="ok">사용 가능한 아이디 입니다.</span>
+                <span id="loginId_already" class="already">중복된 아이디 입니다.</span>
 
-            <label for="password">비밀번호 입력 : </label>
-            <input type="password" id="password" name="password" maxlength="20"><p>
+                <input type="hidden" id="loginId_status" value="empty">
+                <br>
+            </div>
+            <div>
+                <label for="password">비밀번호 입력 : </label>
+                <input type="password" id="password" name="password" maxlength="20"><p>
+            </div>
+            <div>
+                <label for="checkPw">비밀번호 확인 : </label>
+                <input type="password" id="checkPw" name="checkPw" maxlength="20"><p>
+            </div>
+            <div>
+                <label for="name">사용자 이름 : </label>
+                <input type="text" id="name" name="name" maxlength="20"><p>
+            </div>
+            <div>
+                <label for="nickname">사용자 닉네임 : </label>
+                <input type="text" id="nickname" name="nickname" maxlength="20">
+                <button class = "nicknameCheckButton" type="button" onclick="checkNickname()">중복 확인</button><p>
+                <span id="nickname_ok" class="ok">사용 가능한 닉네임 입니다.</span>
+                <span id="nickname_already" class="already">중복된 닉네임 입니다.</span>
 
-            <label for="checkPw">비밀번호 확인 : </label>
-            <input type="password" id="checkPw" name="checkPw" maxlength="20"><p>
-
-            <label for="name">사용자 이름 : </label>
-            <input type="text" id="name" name="name" maxlength="20"><p>
-
-            <label for="nickname">사용자 닉네임 : </label>
-            <input type="text" id="nickname" name="nickname" maxlength="20">
-            <button class = "nicknameCheckButton" type="button" onclick="checkNickname()">중복 확인</button><p>
-
+                <input type="hidden" id="nickname_status" value="empty">
+                <br>
+            </div>
             <div class="gender-selection">
                 <p>성별</p>
                 <input type="radio" checked id="male" name="gender" value="man">
@@ -33,16 +49,28 @@
                 <label for="female" class="btn">여</label>
             </div>
 
-            <label for="email">사용자 이메일 : </label>
-            <input type="email" id="email" name="email" maxlength="100">
-            <button class = "emailCheckButton" type="button" onclick="checkEmail()">중복 확인</button><p>
+            <div>
+                <label for="email">사용자 이메일 : </label>
+                <input type="email" id="email" name="email" maxlength="100">
+                <button class = "emailCheckButton" type="button" onclick="checkEmail()">중복 확인</button><p>
+                <span id="email_ok" class="ok">사용 가능한 이메일 입니다.</span>
+                <span id="email_already" class="already">중복된 이메일 입니다.</span>
 
-            <input type="submit" value="회원가입">
+                <input type="hidden" id="email_status" value="empty">
+                <br>
+            </div>
+
+            <input type="submit" id="formSubmit" value="회원가입">
         </form>
 
     </div>
 </body>
 <script>
+    $(document).ready(function () {
+        $('#formSubmit').prop('disabled', true);  // 비활성화
+        $('#formSubmit').css('background-color', 'gray');  // 회색 배경
+    });
+
     function checkPost(){
         if($("#loginId").val().length<5 || $("#loginId").val().length>20){
             alert("아이디는 5~20 글자 사이로 하셔야 합니다.");
@@ -77,13 +105,97 @@
         const loginId = $("#loginId").val();
         checkDuplicate('loginId',loginId);
     }
-    function checkId(){
+    function checkNickname(){
         const nickname = $("#nickname").val();
         checkDuplicate('nickname',nickname);
     }
-    function checkId(){
+    function checkEmail(){
         const email = $("#email").val();
         checkDuplicate('email',email);
+    }
+
+    function checkDuplicate(field,value){
+        let url;
+        let fieldName;
+        let successMessage;
+        let errorMessage;
+
+        value = value.trim();
+
+        if(value === ""){
+            $(`#${field}_already`).css("display", "inline-block").text("값을 입력하세요.");
+            $(`#${field}_ok`).css("display", "none");
+            $(`#${field}_status`).val('empty');
+        }
+        switch (field){
+            case 'loginId':
+                if($("#loginId").val().length<5 || $("#loginId").val().length>20){
+                    alert("아이디는 5~20 글자 사이로 하셔야 합니다.");
+                    return false;
+                }
+                url = '/selogin/idCheck';
+                fieldName = '아이디';
+                break;
+            case 'nickname':
+                if($("#nickname").val().length<4 || $("#nickname").val().length>20){
+                    alert("닉네임은 4~20 글자 사이로 하셔야 합니다.");
+                    return false;
+                }
+                url = '/selogin/nicknameCheck';
+                fieldName ='닉네임';
+                break;
+            case 'email':
+                if($("#email").val().length<2 || $("#email").val().length>100){
+                    alert("이메일은 2~100 글자 사이로 하셔야 합니다.");
+                    return false;
+                }
+                url = '/selogin/emailCheck';
+                fieldName = '이메일';
+                break;
+            default:
+                return;
+        }
+        successMessage = `사용 가능한 ${fieldName} 입니다.`;
+        errorMessage = `중복된 ${fieldName}입니다. 다른${fieldName}을 입력해 주세요.`;
+
+        $.ajax({
+            url:url,
+            type:'POST',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            data: {
+                [field]: value
+            },
+            success: function (cnt) {
+                if (cnt === 0) {
+                    $(`#${field}_ok`).css("display", "inline-block").text(successMessage);
+                    $(`#${field}_already`).css("display", "none");
+                    $(`#${field}_status`).val('ok');
+                } else {
+                    $(`#${field}_already`).css("display", "inline-block").text(errorMessage);
+                    $(`#${field}_ok`).css("display", "none");
+                    $(`#${field}`).val('');
+                    $(`#${field}_status`).val('already');
+                }
+                checkSignupButtonStatus();
+            },
+            error: function (xhr, status, error) {
+                console.error("에러 발생: ", xhr.responseText);
+                alert("서버와의 통신 중 문제가 발생했습니다.");
+            }
+        });
+    }
+    function checkSignupButtonStatus(){
+        const loginIdStatus = $("#loginId_status").val();
+        const nicknameStatus = $("#nickname_status").val();
+        const emailStatus = $("#email_status").val();
+
+        if(loginIdStatus === 'ok' && nicknameStatus === 'ok' && emailStatus === 'ok'){
+            $("#formSubmit").prop('disabled',false);
+            $("#formSubmit").css('background-color','skyblue');
+        }else{
+            $("#formSubmit").prop('disabled',true);
+            $("#formSubmit").css('background-color','gray');
+        }
     }
 </script>
 </html>

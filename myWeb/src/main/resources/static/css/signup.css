@@ -1,0 +1,6 @@
+/* 상태 메시지 기본적으로 숨기기 */
+.ok, .already {
+    display: none; /* 기본적으로 숨김 */
+    margin-bottom: 6px; /* 높이 간격 조정 */
+    font-size: 14px;
+}

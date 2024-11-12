@@ -17,10 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +100,25 @@ public class LoginSessionController implements IResponseController {
         }
         return "redirect:/";
     }
+
+    @PostMapping("/idCheck")
+    @ResponseBody
+    public int idCheck(@RequestParam String loginId){
+        return userService.idCheck(loginId);
+    }
+
+    @PostMapping("/nicknameCheck")
+    @ResponseBody
+    public int nicknameCheck(@RequestParam String nickname){
+        return userService.nicknameCheck(nickname);
+    }
+
+    @PostMapping("/emailCheck")
+    @ResponseBody
+    public int emailCheck(@RequestParam String email){
+        return userService.emailCheck(email);
+    }
+
     @GetMapping("/logout")
     private String logout(HttpServletResponse response){
         // /logout 은 스프링 security 에서 처리하므로 이쪽 url 로 오지 않음
