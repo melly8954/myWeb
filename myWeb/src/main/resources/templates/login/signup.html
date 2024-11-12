@@ -9,8 +9,8 @@
     <div>
         <form name="signForm" method="post" action="/selogin/signup" onsubmit="return checkPost();">
             <label for="loginId">아이디 입력 : </label>
-            <input type="text" id="loginId" name="loginId" maxlength="20"><p>
-            <button class = "loginIdCheckButton" type="button" onclick="checkId()">중복 확인</button>
+            <input type="text" id="loginId" name="loginId" maxlength="20">
+            <button class = "loginIdCheckButton" type="button" onclick="checkId()">중복 확인</button><p>
 
             <label for="password">비밀번호 입력 : </label>
             <input type="password" id="password" name="password" maxlength="20"><p>
@@ -22,8 +22,8 @@
             <input type="text" id="name" name="name" maxlength="20"><p>
 
             <label for="nickname">사용자 닉네임 : </label>
-            <input type="text" id="nickname" name="nickname" maxlength="20"><p>
-            <button class = "nicknameCheckButton" type="button" onclick="checkNickname()">중복 확인</button>
+            <input type="text" id="nickname" name="nickname" maxlength="20">
+            <button class = "nicknameCheckButton" type="button" onclick="checkNickname()">중복 확인</button><p>
 
             <div class="gender-selection">
                 <p>성별</p>
@@ -34,8 +34,8 @@
             </div>
 
             <label for="email">사용자 이메일 : </label>
-            <input type="text" id="email" name="email" maxlength="100"><p>
-            <button class = "emailCheckButton" type="button" onclick="checkEmail()">중복 확인</button>
+            <input type="email" id="email" name="email" maxlength="100">
+            <button class = "emailCheckButton" type="button" onclick="checkEmail()">중복 확인</button><p>
 
             <input type="submit" value="회원가입">
         </form>
@@ -69,7 +69,7 @@
             alert("이메일은 2~100 글자 사이로 하셔야 합니다.");
             return false;
         }
-        
+
         return true;
     }
 
