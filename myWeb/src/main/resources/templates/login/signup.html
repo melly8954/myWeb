@@ -10,6 +10,7 @@
         <form name="signForm" method="post" action="/selogin/signup" onsubmit="return checkPost();">
             <label for="loginId">아이디 입력 : </label>
             <input type="text" id="loginId" name="loginId" maxlength="20"><p>
+            <button class = "loginIdCheckButton" type="button" onclick="checkId()">중복 확인</button>
 
             <label for="password">비밀번호 입력 : </label>
             <input type="password" id="password" name="password" maxlength="20"><p>
@@ -22,6 +23,7 @@
 
             <label for="nickname">사용자 닉네임 : </label>
             <input type="text" id="nickname" name="nickname" maxlength="20"><p>
+            <button class = "nicknameCheckButton" type="button" onclick="checkNickname()">중복 확인</button>
 
             <div class="gender-selection">
                 <p>성별</p>
@@ -33,6 +35,7 @@
 
             <label for="email">사용자 이메일 : </label>
             <input type="text" id="email" name="email" maxlength="100"><p>
+            <button class = "emailCheckButton" type="button" onclick="checkEmail()">중복 확인</button>
 
             <input type="submit" value="회원가입">
         </form>
@@ -41,12 +44,46 @@
 </body>
 <script>
     function checkPost(){
+        if($("#loginId").val().length<5 || $("#loginId").val().length>20){
+            alert("아이디는 5~20 글자 사이로 하셔야 합니다.");
+            return false;
+        }
+        if($("#password").val().length<5 || $("#password").val().length>20){
+            alert("비밀번호는 5~20 글자 사이로 하셔야 합니다.");
+            return false;
+        }
         if( $("#password").val() !== $("#checkPw").val() ){
-            alert("암호 확인을 해주세요.");
+            alert("비밀번호 확인을 해주세요.");
             $("#checkPw").focus();
             return false;
         }
+        if($("#name").val().length<2 || $("#name").val().length>30){
+            alert("이름은 2~30 글자 사이로 하셔야 합니다.");
+            return false;
+        }
+        if($("#nickname").val().length<4 || $("#nickname").val().length>20){
+            alert("닉네임은 4~20 글자 사이로 하셔야 합니다.");
+            return false;
+        }
+        if($("#email").val().length<2 || $("#email").val().length>100){
+            alert("이메일은 2~100 글자 사이로 하셔야 합니다.");
+            return false;
+        }
+        
         return true;
+    }
+
+    function checkId(){
+        const loginId = $("#loginId").val();
+        checkDuplicate('loginId',loginId);
+    }
+    function checkId(){
+        const nickname = $("#nickname").val();
+        checkDuplicate('nickname',nickname);
+    }
+    function checkId(){
+        const email = $("#email").val();
+        checkDuplicate('email',email);
     }
 </script>
 </html>

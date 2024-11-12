@@ -23,7 +23,7 @@ public class SignUpRequestDto extends LoginRequestDto implements IUser {
     @Size(min = 4, max = 20, message = "닉네임은 4~20 글자 사이로 하셔야 합니다.")
     private String nickname;
 
-    @Size(min = 1, max = 100, message = "이메일은 1~100 글자 사이로 하셔야 합니다.")
+    @Size(min = 2, max = 100, message = "이메일은 2~100 글자 사이로 하셔야 합니다.")
     private String email;
 
     private String gender;
