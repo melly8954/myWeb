@@ -15,10 +15,9 @@
     <div><a href="/signout">로그아웃</a></div>
     <hr />
     <div>세션형 로그인</div>
-    {{#sb3}}
+    {{#webUser}}
     <div>
         <h2>{{nickname}}님 환영합니다 !</h2>
-        <h4>권한은 {{role}} 입니다.</h4>
         <div><a href="/user/infoSession">user/ 회원 정보보기</a></div>
         <button onclick="location.href='/user/infoSession'">유저 정보</button> <br/><br/>
         <div><a href="/admin/infoSession">admin/ 관리자 정보보기</a></div>
@@ -32,8 +31,8 @@
         <div><a href="/signout">로그아웃</a></div>
         <button onclick="location.href='/signout'">로그아웃</button>
     </div>
-    {{/sb3}}
-    {{^sb3}}
+    {{/webUser}}
+    {{^webUser}}
     <div>
         <h3>로그인 되어있지 않습니다!</h3>
         <div><a href="/selogin/signup">회원가입</a></div>
@@ -41,7 +40,7 @@
         <div><a href="/selogin/login">로그인</a></div>
         <button onclick="location.href='/selogin/login'">로그인</button>
     </div>
-    {{/sb3}}
+    {{/webUser}}
 </div>
 </body>
 </html>
