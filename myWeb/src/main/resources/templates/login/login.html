@@ -14,7 +14,7 @@
             <label for="password">비밀번호 : </label>
             <input type="password" id="password" name="password" required placeholder="PW 입력">
 
-            <input type="submit" id="formSubmit" value="로그인">
+            <input type="submit" id="formSubmit"  onclick="$.login()" value="로그인">
 
             <p class="loginForm_link">계정이 없으신가요?<a href="/selogin/signup" id="show-signup">회원가입</a></p>
             <p class="loginForm_link">ID를 잊으셨나요?<a href="/selogin/findId" id="show-findId">ID 찾기</a></p>
@@ -22,11 +22,29 @@
         </form>
     </div>
 </body>
-<!--<script>-->
-<!--    $.login = function(){-->
-<!--        let loginId = $("#loginId").val();-->
-<!--        let loginPw = $("#loginPw").val();-->
-<!--        -->
-<!--    }-->
-<!--</script>-->
+<script>
+    $.login = function(){
+        let loginId = $("#loginId").val();
+        let password = $("#password").val();
+
+        $.ajax({
+            url: "/api/v1/login/signin",
+            type: "POST",
+            dataType: "JSON",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({
+                loginId: loginId,
+                password: password
+            })
+        })
+            .done(function(data, status, xhr) {
+                // 성공 시 실행
+                document.location.href = "/";
+            })
+            .fail(function(jqXHR, status, errorThrown) {
+                // 실패 시 실행
+                alert("아이디와 비밀번호를 확인하세요");
+            });
+    }
+</script>
 </html>
