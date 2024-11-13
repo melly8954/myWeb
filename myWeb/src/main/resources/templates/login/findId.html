@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/findId.css">
+    <title>findID</title>
+</head>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<body>
+    <div>
+        <!-- <form id="findIdForm" method="post" action="/selogin/findId"> -->
+        <label for="name">등록된 이름 : </label>
+        <input type="text" id="name" name="name" placeholder="이름 입력"><p></p>
+        <label for="email">등록한 Email : </label>
+        <input type="email" id="email" name="email" placeholder="Email 입력">
+
+        <input type="submit" value="아이디 찾기" onclick="$.findId()">
+    </div>
+    <div id="idShow">
+    </div>
+</body>
+<script>
+    $.findId = function (){
+        let name = $("#name").val();
+        let email = $("#email").val();
+
+        $.ajax({
+            url: "/api/v1/login/findId",
+            type: "POST",
+            dataType: "JSON",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({
+                name : name,
+                email: email
+            }),
+        }).done(function (data, status, xhr) {
+            if (data.loginId) {
+                $("#idShow").html(`<div class='success'>당신의 아이디는[" ${data.loginId} "]입니다.</div>`);
+            } else {
+                $("#idShow").text(data.message);
+            }
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("Error occurred ", jqXHR.responseText);
+            alert("에러 발생 : " + jqXHR.responseText)
+        });
+    }
+</script>
+</html>

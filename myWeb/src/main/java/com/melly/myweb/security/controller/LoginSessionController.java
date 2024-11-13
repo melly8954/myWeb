@@ -119,6 +119,26 @@ public class LoginSessionController implements IResponseController {
         return userService.emailCheck(email);
     }
 
+    @GetMapping("/findId")
+    private String viewFindId(Model model){
+        return "login/findId";
+    }
+
+    @PostMapping("/findId")
+    private String FindId(@ModelAttribute SignUpRequestDto signUpRequestDto, Model model){
+        try{
+            if(signUpRequestDto == null){
+                return "redirect:/";
+            }
+            IUser findId = this.userService.findByEmail(signUpRequestDto.getEmail());
+            model.addAttribute("findId",findId.getLoginId());
+            return "login/idResult";
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            return "login/findId";
+        }
+    }
+
     @GetMapping("/logout")
     private String logout(HttpServletResponse response){
         // /logout 은 스프링 security 에서 처리하므로 이쪽 url 로 오지 않음
