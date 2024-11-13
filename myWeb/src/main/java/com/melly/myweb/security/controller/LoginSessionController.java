@@ -120,12 +120,12 @@ public class LoginSessionController implements IResponseController {
     }
 
     @GetMapping("/findId")
-    private String viewFindId(Model model){
+    private String viewFindId(){
         return "login/findId";
     }
 
     @PostMapping("/findId")
-    private String FindId(@ModelAttribute SignUpRequestDto signUpRequestDto, Model model){
+    private String findId(@ModelAttribute SignUpRequestDto signUpRequestDto, Model model){
         try{
             if(signUpRequestDto == null){
                 return "redirect:/";
@@ -137,6 +137,11 @@ public class LoginSessionController implements IResponseController {
             log.error(ex.getMessage());
             return "login/findId";
         }
+    }
+
+    @GetMapping("/resetPw")
+    private String resetPw(){
+        return "login/resetPw";
     }
 
     @GetMapping("/logout")
