@@ -4,9 +4,7 @@ import com.melly.myweb.commons.dto.ResponseCode;
 import com.melly.myweb.commons.dto.ResponseDto;
 import com.melly.myweb.commons.inif.ICommonRestController;
 import com.melly.myweb.security.config.SecurityConfig;
-import com.melly.myweb.security.dto.FindIdDto;
-import com.melly.myweb.security.dto.FindIdResponseDto;
-import com.melly.myweb.security.dto.LoginRequestDto;
+import com.melly.myweb.security.dto.*;
 import com.melly.myweb.user.IUser;
 import com.melly.myweb.user.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.Random;
 
 @Slf4j
 @RestController
@@ -47,7 +48,7 @@ public class LoginRestController implements ICommonRestController{
         }
     }
 
-    @PostMapping("findId")
+    @PostMapping("findid")
     private ResponseEntity<FindIdResponseDto> findId(@Validated @RequestBody FindIdDto findIdDto){
         FindIdResponseDto responseDto = new FindIdResponseDto();
         try{
@@ -71,6 +72,55 @@ public class LoginRestController implements ICommonRestController{
         }
     }
 
+    @PostMapping("/resetpw")
+    private ResponseEntity<ResetPwResponseDto> resetPw(@Validated @RequestBody ResetPwDto resetPwDto){
+        ResetPwResponseDto responseDto = new ResetPwResponseDto();
+        try{
+            if( resetPwDto.getLoginId().isEmpty() || resetPwDto.getName().isEmpty() || resetPwDto.getEmail().isEmpty() ){
+                responseDto.setMessage("loginId와 name, email을 입력하십시오.");
+                return ResponseEntity.badRequest().body(responseDto);
+            }
+            IUser user = userService.findByEmail(resetPwDto.getEmail());
+            if( user != null && user.getLoginId().equals(resetPwDto.getLoginId()) && user.getName().equals(resetPwDto.getName()) ){
+                String randomValue = getRandomString(8);    //  숫자 + 문자 + 특수문자 조합 문자열 생성
+                user.setPassword(randomValue);
+                userService.changePassword(user);
+                responseDto.setPassword(user.getPassword());
+                responseDto.setMessage("Pw 초기화 성공");
+                return ResponseEntity.ok().body(responseDto);
+            } else{
+                responseDto.setMessage("등록된 계정이 존재하지 않습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+            }
+        }catch (Exception ex){
+            log.error(ex.toString());
+            responseDto.setMessage("Pw 초기화 실패");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDto);
+        }
+    }
+
+    private final char[] randomCharSet = new char[]{
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '!', '@', '#', '^', '?', '*', '+'
+            // 원하는 특수문자 추가해서 사용
+    };
+
+    public String getRandomString(int size){
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random(new Date().getTime());
+
+        int len = randomCharSet.length;
+
+        for( int i=0; i<size; i++ ){
+            // random.nextInt(len)은 0부터 randomCharSet.length - 1 사이의 값을 무작위로 반환
+            sb.append(randomCharSet[random.nextInt(len)]);
+        }
+        return sb.toString();
+    }
     @Override
     public ResponseEntity<ResponseDto> insert(Model model, Object dto) {
         return null;

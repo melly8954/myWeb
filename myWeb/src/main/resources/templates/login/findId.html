@@ -11,7 +11,7 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 <body>
     <div>
-        <!-- <form id="findIdForm" method="post" action="/selogin/findId"> -->
+        <!-- <form id="findIdForm" method="post" action="/selogin/findid"> -->
         <label for="name">등록된 이름 : </label>
         <input type="text" id="name" name="name" placeholder="이름 입력"><p></p>
         <label for="email">등록한 Email : </label>
@@ -19,8 +19,10 @@
 
         <input type="submit" value="아이디 찾기" onclick="$.findId()">
     </div>
+    <p class="loginForm_link">계정이 없으신가요?<a href="/selogin/signup" id="show-signup">회원가입</a></p>
     <div id="idShow">
     </div>
+
 </body>
 <script>
     $.findId = function (){
@@ -28,7 +30,7 @@
         let email = $("#email").val();
 
         $.ajax({
-            url: "/api/v1/login/findId",
+            url: "/api/v1/login/findid",
             type: "POST",
             dataType: "JSON",
             contentType: "application/json; charset=UTF-8",
@@ -38,7 +40,8 @@
             }),
         }).done(function (data, status, xhr) {
             if (data.loginId) {
-                $("#idShow").html(`<div class='success'>당신의 아이디는[" ${data.loginId} "]입니다.</div>`);
+                $("#idShow").html(`<div class='success'>당신의 아이디는[" ${data.loginId} "]입니다.</div>
+                                    <div>로그인 하러 가기 <button><a href="/selogin/login">로그인</a></button></div>`);
             } else {
                 $("#idShow").text(data.message);
             }
