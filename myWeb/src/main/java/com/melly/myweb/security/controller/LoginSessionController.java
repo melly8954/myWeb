@@ -139,7 +139,7 @@ public class LoginSessionController implements IResponseController {
         }
     }
 
-    @GetMapping("/resetPw")
+    @GetMapping("/resetpw")
     private String resetPw(){
         return "login/resetPw";
     }
@@ -150,6 +150,20 @@ public class LoginSessionController implements IResponseController {
         Long urlId = cudInfoDto.getLoginUser().getId();
         model.addAttribute("urlId",urlId);
         return "login/info";
+    }
+
+    @GetMapping("/changepw")
+    private String changePw(Model model){
+        try{
+            // 로그인 되어 있어야 가능함을 나타냄
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            return "login/changePw";
+
+        }catch (Exception ex){
+            log.error(ex.toString());
+            return "login/login";
+        }
+
     }
 
     @GetMapping("/logout")

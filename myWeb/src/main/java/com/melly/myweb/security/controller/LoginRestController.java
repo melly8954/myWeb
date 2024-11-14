@@ -135,6 +135,27 @@ public class LoginRestController implements ICommonRestController{
             return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999,ex.getMessage(), null);
         }
     }
+
+    @PostMapping("/changepw")
+    private ResponseEntity<ResponseDto> changePw(@Validated @RequestBody ChangePwDto changePwDto, Model model){
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            IUser user = cudInfoDto.getLoginUser();
+            if(changePwDto.getNewPassword().length() <5){
+                return makeResponseEntity(HttpStatus.BAD_REQUEST,ResponseCode.R888881,"비밀번호는 5글자 이상으로 정하셔야 합니다.",null);
+            }
+            if(!changePwDto.getNewPassword().equals(changePwDto.getCheckNewPassword())){
+                return makeResponseEntity(HttpStatus.BAD_REQUEST, ResponseCode.R888881, "비밀번호가 일치하지 않습니다.", null);
+            }
+            user.setPassword(changePwDto.getNewPassword());
+            userService.changePassword(user);
+            return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"OK",user);
+        }catch (Exception ex){
+            log.error(ex.toString());
+            return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999,"비밀번호 변경 실패",null);
+        }
+    }
+
     @Override
     public ResponseEntity<ResponseDto> insert(Model model, Object dto) {
         return null;

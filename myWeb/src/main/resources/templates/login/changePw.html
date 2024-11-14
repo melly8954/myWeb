@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 변경 페이지</title>
+</head>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<body>
+    <div class="change-password-container">
+        <div class="form-wrapper">
+            <div class="form-container" id="change-password-form">
+                <h3>비밀번호 변경하기</h3>
+                <div class="form-group">
+                    <label for="newPassword">새 비밀번호</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkNewPassword">새 비밀번호 확인</label>
+                    <input type="password" id="checkNewPassword" name="checkNewPassword" required>
+                </div>
+                <button type="button" id="change-password-btn" onclick="$.changePassword()">비밀번호 변경</button>
+                <br><br>
+                <a href="/">홈으로 이동</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $.changePassword = function (){
+        let newPassword = $("#newPassword").val();
+        let checkNewPassword = $("#checkNewPassword").val();
+
+        $.ajax({
+            url:`/api/v1/login/changepw`,
+            type: "POST",
+            dataType: "JSON",
+            contentType: "application/json; charset=UTF-8",
+            data:JSON.stringify({
+                newPassword: newPassword,
+                checkNewPassword: checkNewPassword
+            })
+        }).done(function (data,status,xhr){
+            if(data.message === "OK"){
+                alert("비밀번호가 성공적으로 변경되었습니다.");
+            }else{
+                alert(data.message);
+            }
+            document.location.href="/selogin/info"
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("Error occurred", jqXHR.responseText);
+            alert(jqXHR.responseJSON.message);
+        });
+    }
+</script>
+</html>
