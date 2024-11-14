@@ -144,6 +144,14 @@ public class LoginSessionController implements IResponseController {
         return "login/resetPw";
     }
 
+    @GetMapping("/info")
+    private String infoPage(Model model){
+        CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+        Long urlId = cudInfoDto.getLoginUser().getId();
+        model.addAttribute("urlId",urlId);
+        return "login/info";
+    }
+
     @GetMapping("/logout")
     private String logout(HttpServletResponse response){
         // /logout 은 스프링 security 에서 처리하므로 이쪽 url 로 오지 않음

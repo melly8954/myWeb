@@ -1,11 +1,13 @@
 package com.melly.myweb.commons.dto;
 
 import com.melly.myweb.user.IUser;
+import lombok.Getter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CUDInfoDto {
+@Getter
+public class CUDInfoDto  {
     private final IUser loginUser;
 
     public CUDInfoDto(IUser loginUser){

@@ -1,5 +1,6 @@
 package com.melly.myweb.security.controller;
 
+import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.ResponseCode;
 import com.melly.myweb.commons.dto.ResponseDto;
 import com.melly.myweb.commons.inif.ICommonRestController;
@@ -7,6 +8,7 @@ import com.melly.myweb.security.config.SecurityConfig;
 import com.melly.myweb.security.dto.*;
 import com.melly.myweb.user.IUser;
 import com.melly.myweb.user.IUserService;
+import com.melly.myweb.user.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +122,18 @@ public class LoginRestController implements ICommonRestController{
             sb.append(randomCharSet[random.nextInt(len)]);
         }
         return sb.toString();
+    }
+
+    @GetMapping("/info/{id}")
+    private ResponseEntity<ResponseDto> userInfo(@PathVariable Long id){
+        try{
+            IUser user = this.userService.findById(id);
+            return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"OK",user);
+
+        }catch (Exception ex){
+            log.error(ex.toString());
+            return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999,ex.getMessage(), null);
+        }
     }
     @Override
     public ResponseEntity<ResponseDto> insert(Model model, Object dto) {

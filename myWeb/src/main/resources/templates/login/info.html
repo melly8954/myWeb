@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 마이 페이지</title>
+    <link rel="stylesheet" href="/css/info.css">
+</head>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<body>
+    <div id="showInfo"></div>
+</body>
+<script>
+    $(function () {
+        $.showInfo();
+    });
+
+    $.showInfo = function (){
+        let urlId = {{urlId}}
+        $.ajax({
+            url:"/api/v1/login/info/" + urlId,
+            type: "GET",
+            contentType: "application/json; charset=UTF-8"
+        }).done(function (data, status, xhr) {
+            $("#showInfo").html(`<div class="userInfo"> 마이 페이지
+                                    <div>사용자 아이디 : ${data.responseData.loginId}</div>
+                                    <div>사용자 이름 : ${data.responseData.name}</div>
+                                    <div>사용자 닉네임 : ${data.responseData.nickname}</div>
+                                    <div>사용자 성별 : ${data.responseData.gender}</div>
+                                    <div>사용자 이메일 : ${data.responseData.email}</div>
+                                    </div>`);
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.error("AJAX 실패: ", jqXHR, status, errorThrown);
+            const errorMessage = jqXHR.responseJSON?.message || "알 수 없는 오류가 발생했습니다.";
+            alert("검색을 실패했습니다. " + errorMessage);
+        });
+    };
+
+</script>
+</html>
