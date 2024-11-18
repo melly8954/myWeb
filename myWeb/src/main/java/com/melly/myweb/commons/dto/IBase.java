@@ -75,19 +75,4 @@ public interface IBase {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(today);
     }
-
-    default void setCreateInfo(Long memberId) {
-        this.setCreateDt(this.getSystemDt());
-        this.setCreateId(memberId);
-    }
-
-    default void setUpdateInfo(Long memberId) {
-        this.setUpdateDt(this.getSystemDt());
-        this.setUpdateId(memberId);
-    }
-
-    default void setDeleteInfo(Long memberId) {
-        this.setDeleteDt(this.getSystemDt());
-        this.setDeleteId(memberId);
-    }
 }
