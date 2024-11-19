@@ -118,6 +118,7 @@ public class BoardFreeServiceImpl implements IBoardFreeService{
                 .build();
 
         Integer count = this.boardLikeMybatisMapper.countByLike(boardLikeDto);
+        // 한 사람당 1번의 좋아요 기능 사용 즉, 0보다 큰 경우 이미 좋아요를 누른 경우라 return
         if( count > 0 ){
             return;
         }
