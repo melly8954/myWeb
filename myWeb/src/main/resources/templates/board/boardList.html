@@ -6,12 +6,25 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>게시판 목록</title>
+    <script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div>
         <h1>자유 게시판</h1>
         <p>자유롭게 글을 남겨 보세요</p>
+        <div id="showBoard"></div>
+        <button onclick="location.href='/board/board_insert'">게시글 등록</button><a href="/board/board_insert">게시글 등록</a>
     </div>
-
+    <div>
+        게시판 수 : {{searchBoardDto.total}}
+    </div>
+    <div>
+        {{#boardList}}
+            {{title}}
+        {{/boardList}}
+    </div>
 </body>
+<script>
+
+</script>
 </html>

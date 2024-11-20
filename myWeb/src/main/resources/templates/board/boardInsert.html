@@ -6,5 +6,18 @@
 </head>
 <body>
 게시글 등록화면
+    <form id="postForm" name="postForm" method="post" action="/board/board_insert">
+        <!-- 제목 -->
+        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+
+        <!-- 내용 -->
+        <div id="content" name="content"  contenteditable="true"></div>
+
+        <!-- 취소 및 추가 버튼 -->
+        <div class="flex space-x-4">
+            <button type="button" onclick="goBack()">취소</button>
+            <button type="submit">등록</button>
+        </div>
+    </form>
 </body>
 </html>

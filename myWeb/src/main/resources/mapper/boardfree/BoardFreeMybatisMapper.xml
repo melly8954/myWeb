@@ -71,7 +71,7 @@
         LEFT JOIN user_tbl AS ut ON bt.createId = ut.id
         WHERE bt.deleteYn = false
             AND ${searchType} Like CONCAT('%',#{searchName},'%')
-        ORDER BY ${orderByWordr}
+        ORDER BY ${orderByWord}
         LIMIT #{rowsOnePage} OFFSET #{firstIndex}
     </select>
 
