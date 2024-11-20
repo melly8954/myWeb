@@ -33,7 +33,7 @@
 
 
     <!-- 게시글 상세정보 조회 -->
-    <select id="findById" parameterType="Long" resultType="BoardDto">
+    <select id="findById" parameterType="Long" resultType="BoardFreeDto">
         SELECT bt.id
             , bt.title
             , bt.content
