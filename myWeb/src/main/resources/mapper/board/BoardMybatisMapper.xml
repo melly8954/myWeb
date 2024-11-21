@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.melly.myweb.board.IBoardMybatisMapper">
+
+    <!-- 게시글 등록 -->
+    <insert id="insert" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO board_tbl ( name
+                              , content
+                              , viewQty
+                              , likeQty
+                              , createId
+                              , createDt
+                              , deleteFlag)
+        VALUES ( #{name}
+               , #{content}
+               , 0
+               , 0
+               , #{createId}
+               , #{createDt}
+               , false)
+    </insert>
+
+
+    <!-- 게시글 수정 -->
+    <update id="update" parameterType="BoardDto">
+        UPDATE board_tbl
+        SET title = #{title}
+            , content = #{content}
+            , updateId = #{updateId}
+            , updateDt = #{updateDt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateDeleteFlag" parameterType="BoardDto">
+        UPDATE board_tbl
+        SET deleteId = #{deleteId}
+          , deleteDt = #{deleteDt}
+          , deleteFlag = #{deleteFlag}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="delete" parameterType="Long">
+        UPDATE board_tbl
+        SET deleteYn = TRUE
+        WHERE id = #{id}
+    </delete>
+
+
+    <!-- 게시글 상세정보 조회 -->
+    <select id="findById" resultType="BoardDto">
+        SELECT bt.id
+            , bt.title
+            , bt.content
+            , bt.viewQty
+            , bt.likeQty
+            , bt.createId
+            , bt.createDt
+            , ct.nickname As createName
+            , bt.updateId
+            , bt.updateDt
+            , bt.deleteYn
+            , ut.nickname As updateName
+            , bt.deleteId
+            , bt.deleteDt
+            , dt.nickname As deleteName
+            , bt.deleteFlag
+        FROM board_tbl AS bt
+            LEFT OUTER JOIN user_tbl AS ut on bt.createId = ct.id
+            LEFT OUTER JOIN user_tbl AS ut on bt.updateName = ut.id
+            LEFT OUTER JOIN user_tbl AS ut on bt.deleteName = dt.id
+        WHERE bt.id = #{id}
+        AND bt.deleteYn = false
+    </select>
+
+
+    <!-- 게시글 리스트 & 해당 글에 달린 댓글 개수 조회 -->
+    <select id="findAllByNameContains" parameterType="SearchQueryDto" resultType="BoardDto">
+        SELECT bt.id
+             , bt.title
+             , bt.content
+             , bt.viewQty
+             , bt.likeQty
+             , bt.createId
+             , bt.createDt
+             , ct.nickname As createName
+             , bt.updateId
+             , bt.updateDt
+             , bt.deleteYn
+             , ut.nickname As updateName
+             , bt.deleteId
+             , bt.deleteDt
+             , dt.nickname As deleteName
+             , bt.deleteFlag
+        FROM board_tbl AS bt
+            LEFT OUTER JOIN user_tbl AS ut on bt.createId = ct.id
+            LEFT OUTER JOIN user_tbl AS ut on bt.updateName = ut.id
+            LEFT OUTER JOIN user_tbl AS ut on bt.deleteName = dt.id
+        WHERE bt.title like CONCAT('%',#{searchName},'%')
+          AND bt.deleteFlag = false
+        ORDER BY ${orderByWord}
+            LIMIT #{rowsOnePage} OFFSET #{firstIndex}
+    </select>
+
+
+    <!-- 게시글 카운트 -->
+    <select id="countAllByNameContains" parameterType="SearchQueryDto" resultType="Integer">
+        SELECT COUNT(*)
+        FROM board_tbl AS bt
+        WHERE name like CONCAT('%',#{searchName},'%')
+          AND deleteFlag = false
+    </select>
+
+
+    <!-- 조회수 증가 -->
+    <update id="addViewQty" parameterType="Long">
+        UPDATE board_tbl
+        SET viewQty = viewQty + 1
+        WHERE id = #{id}
+        AND deleteFlag = false
+    </update>
+
+
+    <!-- 좋아요 누를 경우 -->
+    <update id="addLikeQty">
+        UPDATE board_tbl
+        SET likeQty = likeQty + 1
+        WHERE id = #{id}
+        AND deleteFlag = false
+    </update>
+
+
+    <!-- 좋아요 제거 할 경우 -->
+    <update id="subLikeQty">
+        UPDATE board_tbl
+        SET likeQty = likeQty + 1
+        WHERE id = #{id}
+        AND deleteFlag = false
+    </update>
+
+</mapper>
+

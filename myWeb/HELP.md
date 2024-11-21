@@ -55,7 +55,7 @@ flush privileges;
 -- myweb_db.user_tbl definition
 
 CREATE TABLE `user_tbl` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `loginId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -70,24 +70,32 @@ CREATE TABLE `user_tbl` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2. board_free_tbl
--- myweb_db.board_free_tbl definition
+-- 2. board_tbl
+-- myweb_db.board_tbl definition
 
-CREATE TABLE `board_free_tbl` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `content` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `createId` bigint NOT NULL,
-  `createDt` datetime DEFAULT CURRENT_TIMESTAMP,
-  `viewQty` int NOT NULL DEFAULT '0',
-  `likeQty` int NOT NULL DEFAULT '0',
-  `updateDt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `deleteYn` tinyint NOT NULL DEFAULT '0',
+CREATE TABLE `board_tbl` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `content` varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `viewQty` int DEFAULT '0',
+  `likeQty` int DEFAULT '0',
+  `createId` bigint unsigned DEFAULT NULL,
+  `createDt` datetime DEFAULT NULL,
+  `updateId` bigint unsigned DEFAULT NULL,
+  `updateDt` datetime DEFAULT NULL,
+  `deleteId` bigint unsigned DEFAULT NULL,
+  `deleteDt` datetime DEFAULT NULL,
+  `deleteFlag` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `createId` (`createId`),
-  CONSTRAINT `board_free_tbl_ibfk_1` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+  KEY `board_tbl_user_tbl_createId` (`createId`),
+  KEY `board_tbl_user_tbl_updateId` (`updateId`),
+  KEY `board_tbl_user_tbl_deleteId` (`deleteId`),
+  KEY `board_tbl_id_IDX` (`id`,`deleteFlag`) USING BTREE,
+  KEY `board_tbl_title_IDX` (`title`,`deleteFlag`) USING BTREE,
+  CONSTRAINT `board_tbl_user_tbl_createId` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `board_tbl_user_tbl_deleteId` FOREIGN KEY (`deleteId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `board_tbl_user_tbl_updateId` FOREIGN KEY (`updateId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- 3. board_like_tbl
@@ -96,14 +104,13 @@ CREATE TABLE `board_free_tbl` (
 CREATE TABLE `board_like_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `tbl` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `boardId` bigint NOT NULL,
-  `createId` bigint NOT NULL,
+  `createId` bigint unsigned NOT NULL,
+  `boardId` bigint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `board_like_tbl_boardId_IDX` (`tbl`,`boardId`) USING BTREE,
-  KEY `board_like_tbl_createId_IDX` (`createId`) USING BTREE,
-  CONSTRAINT `board_like_tbl_user_tbl_FK` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=287 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+  KEY `board_like_tbl_user_tbl_createId` (`createId`),
+  KEY `board_like_tbl_tbl_IDX` (`tbl`,`createId`,`boardId`) USING BTREE,
+  CONSTRAINT `board_like_tbl_user_tbl_createId` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 -- 4. board_comment_tbl

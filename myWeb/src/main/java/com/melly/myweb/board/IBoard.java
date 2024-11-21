@@ -1,8 +1,8 @@
-package com.melly.myweb.board.free;
+package com.melly.myweb.board;
 
-import com.melly.myweb.board.common.IBoardBase;
+import com.melly.myweb.commons.dto.IBase;
 
-public interface IBoardFree extends IBoardBase {
+public interface IBoard extends IBase {
     Long getId();
     void setId(Long id);
 
@@ -18,10 +18,9 @@ public interface IBoardFree extends IBoardBase {
     Integer getLikeQty();
     void setLikeQty(Integer likeQty);
 
-    String getCountComment();
-    void setCountComment(String countComment);
+    String getTbl();
 
-    default void copyFields(IBoardFree from) {
+    default void copyFields(IBoard from) {
         if (from == null) {
             return;
         }
@@ -40,21 +39,6 @@ public interface IBoardFree extends IBoardBase {
         if (from.getLikeQty() != null) {
             this.setLikeQty(from.getLikeQty());
         }
-        if (from.getCreateDt() != null && !from.getCreateDt().isEmpty()) {
-            this.setCreateDt(from.getCreateDt());
-        }
-        if (from.getCreateId() != null) {
-            this.setCreateId(from.getCreateId());
-        }
-        if (from.getUpdateDt() != null && !from.getUpdateDt().isEmpty()) {
-            this.setUpdateDt(from.getUpdateDt());
-        }
-        if (from.getDeleteYn() != null) {
-            this.setDeleteYn(from.getDeleteYn());
-        }
-        if (from.getCreateName() != null) {
-            this.setCreateName(from.getCreateName());
-        }
-
+        IBase.super.copyFields(from);
     }
 }

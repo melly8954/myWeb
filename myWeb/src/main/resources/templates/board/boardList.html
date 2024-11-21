@@ -12,7 +12,6 @@
     <div>
         <h1>자유 게시판</h1>
         <p>자유롭게 글을 남겨 보세요</p>
-        <div id="showBoard"></div>
         <button onclick="location.href='/board/board_insert'">게시글 등록</button><a href="/board/board_insert">게시글 등록</a>
     </div>
     <div>
@@ -20,7 +19,14 @@
     </div>
     <div>
         {{#boardList}}
-            {{title}}
+        <div id="showBoard" onclick="location.href='/boardFree/board_view?id={{id}}'">
+            <span>게시글 ID : {{id}}</span>
+            <span>게시글 제목 : {{title}}</span>
+            <span>작성자 : {{createName}}</span>
+            <span>작성일 : {{createDt}}</span>
+            <span>조회수 : {{viewQty}}</span>
+            <span>좋아요 갯수 : {{likeQty}}</span>
+        </div>
         {{/boardList}}
     </div>
 </body>
