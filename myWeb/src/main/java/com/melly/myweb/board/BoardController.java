@@ -28,16 +28,16 @@ public class BoardController implements IResponseController {
 
     @GetMapping("/board_list")
     private String boardAjxList(Model model) {
-//        try{
-//            makeResponseCheckLogin(model);
-//            List<BoardDto> list =  this.boardService.findAllByNameContains();
-//            model.addAttribute("boardList",list);
-//        }catch (LoginAccessException ex){
-//            log.error(ex.toString());
-//            return "redirect:/selogin/login";
-//        }catch (Exception ex){
-//            log.error(ex.toString());
-//        }
+        try{
+            makeResponseCheckLogin(model);
+            List<BoardDto> list =  this.boardService.findAllByNameContains();
+            model.addAttribute("boardList",list);
+        }catch (LoginAccessException ex){
+            log.error(ex.toString());
+            return "redirect:/selogin/login";
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
         return "board/boardList";
     }
 }
