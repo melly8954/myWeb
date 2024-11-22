@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IBoardService extends IServiceCRUD<BoardDto> {
-    List<BoardDto> findAllByNameContains(SearchQueryDto searchQueryDto);
+    List<BoardDto> findAllByNameContains();
     Integer countAllByNameContains(SearchQueryDto searchQueryDto);
 
     void addViewQty(Long id);

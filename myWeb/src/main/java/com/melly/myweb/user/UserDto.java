@@ -1,5 +1,6 @@
 package com.melly.myweb.user;
 
+import com.melly.myweb.commons.dto.BaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UserDto implements IUser {
+public class UserDto extends BaseDto implements IUser {
     Long id;
     String loginId;
     String password;

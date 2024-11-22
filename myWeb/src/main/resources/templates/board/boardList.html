@@ -15,22 +15,57 @@
         <button onclick="location.href='/board/board_insert'">게시글 등록</button><a href="/board/board_insert">게시글 등록</a>
     </div>
     <div>
-        게시판 수 : {{searchBoardDto.total}}
     </div>
     <div>
-        {{#boardList}}
-        <div id="showBoard" onclick="location.href='/boardFree/board_view?id={{id}}'">
-            <span>게시글 ID : {{id}}</span>
-            <span>게시글 제목 : {{title}}</span>
-            <span>작성자 : {{createName}}</span>
-            <span>작성일 : {{createDt}}</span>
-            <span>조회수 : {{viewQty}}</span>
-            <span>좋아요 갯수 : {{likeQty}}</span>
-        </div>
-        {{/boardList}}
+        <ul id="BoardList"></ul>
     </div>
+
 </body>
 <script>
+    $(function () {
+       searchBoardList();
+    })
 
+   function searchBoardList(){
+        $.ajax({    // jQuery Ajax 비동기 서버와 통신
+            url: "/api/board/showBoardList",  // 서버 주소
+            type: "GET",   // method 방식
+            datatype: "JSON",   // 전송하는 데이터 방식
+            data: null,
+            // 전송하는 실제 데이터 JSON 을 사용했다.
+            contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
+        }).done(function (data, status, xhr) {
+            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            if (status === "success") {
+                $.showBoardList(data.responseData);
+            }
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+            alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
+        });
+    }
+    $.showBoardList = function (boardList) {
+        const list = $("#BoardList");
+        list.children().remove();
+        for (let i = 0; i < boardList.length; i++) {
+            let id = boardList[i].id;
+            let title = boardList[i].title;
+            let content = boardList[i].content;
+            let viewQty = boardList[i].viewQty;
+            let likeQty = boardList[i].likeQty;
+            let createName = boardList[i].createName;
+            let createDt = boardList[i].createDt;
+            let updateDt = boardList[i].updateDt;
+            let strLi = `<li><div><span>id : ${id}</span>
+                                  <span>title : ${title}</span>
+                                  <span>content : ${content}</span>
+                                  <span>viewqty : ${viewQty}</span>
+                                  <span>likeqty : ${likeQty}</span>
+                                  <span>createName : ${createName}</span>
+                                  <span>createdt : ${createDt}</span>
+                                  <span>updateDt : ${updateDt}</span></div></li>`;
+            list.append(strLi);
+        }
+    }
 </script>
 </html>

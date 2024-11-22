@@ -145,6 +145,21 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public Boolean updateDeleteFlag(CUDInfoDto cudInfoDto, IUser user) {
+        if ( user == null || user.getId() == null || user.getId() <= 0 ) {
+            return false;
+        }
+        UserDto find = this.userMybatisMapper.findById(user.getId());
+        if (find == null) {
+            throw new IdNotFoundException(String.format("Error : not found id = %d !", user.getId()));
+        }
+        find.copyFields(user);
+        cudInfoDto.setDeleteInfo(find);
+        this.userMybatisMapper.updateDeleteFlag(find);
+        return true;
+    }
+
+    @Override
     public Boolean deleteById(Long id) {
         if( id == null || id <= 0 ) {
             return null;

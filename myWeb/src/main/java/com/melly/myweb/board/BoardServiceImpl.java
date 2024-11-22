@@ -78,12 +78,8 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
-    public List<BoardDto> findAllByNameContains(SearchQueryDto searchQueryDto) {
-        if ( searchQueryDto == null ) {
-            return List.of();
-        }
-        searchQueryDto.settingValues();
-        List<BoardDto> list = this.boardMybatisMapper.findAllByNameContains(searchQueryDto);
+    public List<BoardDto> findAllByNameContains() {
+        List<BoardDto> list = this.boardMybatisMapper.findAllByNameContains();
         return list;
     }
 
