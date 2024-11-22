@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 등록</title>
+    <link rel="stylesheet" href="/css/boardInsert.css">
+    <script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 게시글 등록화면
-    <form id="postForm" name="postForm" method="post" action="/board/board_insert">
+    <form id="postForm" name="postForm" method="post" onsubmit="addBoard()" action="/board/boardInsert">
         <!-- 제목 -->
         <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
 
         <!-- 내용 -->
-        <div id="content" name="content"  contenteditable="true"></div>
+        <div id="content" class="rounded-lg" name="content" contenteditable="true"></div>
 
         <!-- 취소 및 추가 버튼 -->
         <div class="flex space-x-4">
             <button type="button" onclick="goBack()">취소</button>
-            <button type="submit">등록</button>
+            <button id="btn01" type="submit">등록</button>
         </div>
     </form>
 </body>
+<script>
+    const goBack = () => {
+        history.back();
+    }
+    function addBoard() {
+        let ret = confirm(" 추가 하시겠습니까 ?");
+        return ret;
+    }
+</script>
 </html>

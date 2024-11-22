@@ -5,14 +5,14 @@
 
     <!-- 게시글 등록 -->
     <insert id="insert" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO board_tbl ( name
+        INSERT INTO board_tbl ( title
                               , content
                               , viewQty
                               , likeQty
                               , createId
                               , createDt
                               , deleteFlag)
-        VALUES ( #{name}
+        VALUES ( #{title}
                , #{content}
                , 0
                , 0

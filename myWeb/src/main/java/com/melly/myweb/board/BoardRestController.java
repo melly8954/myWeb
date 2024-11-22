@@ -1,5 +1,6 @@
 package com.melly.myweb.board;
 
+import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.ResponseCode;
 import com.melly.myweb.commons.dto.ResponseDto;
 import com.melly.myweb.commons.dto.SearchQueryDto;
@@ -20,7 +21,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/board")
-public class BoardRestController implements ICommonRestController {
+public class BoardRestController implements ICommonRestController<BoardDto> {
     @Autowired
     private IBoardService boardService;
 
@@ -42,14 +43,24 @@ public class BoardRestController implements ICommonRestController {
         }
     }
 
-
     @Override
-    public ResponseEntity<ResponseDto> insert(Model model, Object dto) {
-        return null;
+    @PostMapping("boardInsert")
+    public ResponseEntity<ResponseDto> insert(Model model, @Validated @RequestBody BoardDto boardDto) {
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            BoardDto insert = this.boardService.insert(cudInfoDto,boardDto);
+            return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",insert);
+        }catch (LoginAccessException ex){
+            log.error(ex.toString());
+            return makeResponseEntity(HttpStatus.FORBIDDEN,ResponseCode.R888881, ex.getMessage(),null);
+        }catch (Exception ex){
+            log.error(ex.toString());
+            return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999, ex.getMessage(),null);
+        }
     }
 
     @Override
-    public ResponseEntity<ResponseDto> update(Model model, Long id, Object dto) {
+    public ResponseEntity<ResponseDto> update(Model model, Long id, BoardDto dto) {
         return null;
     }
 
