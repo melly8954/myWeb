@@ -10,10 +10,12 @@
 게시글 등록화면
     <form id="postForm" name="postForm" method="post" onsubmit="addBoard()" action="/board/boardInsert">
         <!-- 제목 -->
-        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+        <label for="title">게시글 제목 : </label>
+        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required><p></p>
 
         <!-- 내용 -->
-        <div id="content" class="rounded-lg" name="content" contenteditable="true"></div>
+        <label for="content">게시글 내용 : </label>
+        <input type="text" id="content" name="content" contenteditable="true" placeholder="내용을 입력하세요" required>
 
         <!-- 취소 및 추가 버튼 -->
         <div class="flex space-x-4">
