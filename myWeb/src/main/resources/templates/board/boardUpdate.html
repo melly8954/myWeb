@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+</head>
+<body>
+<h1>게시글 수정 화면</h1>
+<form id="postForm" name="postForm" method="post" onsubmit="updateBoard()" action="/board/board_update?id={{board_list.id}}">
+    <!-- 제목 -->
+    <label for="title">게시글 제목 : </label>
+    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required><p></p>
+
+    <!-- 내용 -->
+    <label for="content">게시글 내용 : </label>
+    <input type="text" id="content" name="content" placeholder="내용을 입력하세요" required>
+
+    <!-- 취소 및 추가 버튼 -->
+    <div class="flex space-x-4">
+        <button type="button" onclick="goBack()">취소</button>
+        <button id="btn01" type="submit">등록</button>
+    </div>
+
+    <script src="/js/jquery-3.7.1.min.js"></script>
+</form>
+</body>
+<script>
+    // 이전 페이지로 이동
+    function goBack() {
+        window.history.back();
+    }
+    function updateBoard() {
+        let ret = confirm("추가 하시겠습니까?");
+        if (ret) {
+            return true;  // 확인 버튼을 눌렀을 때 폼을 제출
+        } else {
+            return false; // 취소 버튼을 눌렀을 때 폼 제출을 막음
+        }
+    }
+</script>
+</html>

@@ -42,7 +42,7 @@
     function boardUpdate() {
         let id = {{boardView.id}}
         if (confirm(id+"번 게시글을 수정 하시겠습니까 ?")) {
-            window.location.href = "/board/board_delete?id=" + id;
+            window.location.href = "/board/board_update_page?id=" + id;
         }
     }
     function boardDelete() {

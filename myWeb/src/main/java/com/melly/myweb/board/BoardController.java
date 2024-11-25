@@ -84,6 +84,34 @@ public class BoardController implements IResponseController {
         return "board/boardView";
     }
 
+    @GetMapping("/board_update_page")
+    public String boardUpdatePage(Model model, @RequestParam Long id){
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            IBoard find  = this.boardService.findById(id);
+            model.addAttribute("board_list",find);
+        }catch (LoginAccessException ex){
+            log.error(ex.toString());
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
+        return "board/boardUpdate";
+    }
+
+    @PostMapping("/board_update")
+    public String boardUpdate(Model model, @RequestParam Long id){
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            BoardDto boardDto = BoardDto.builder().build();
+            this.boardService.update(cudInfoDto,boardDto);
+        }catch (LoginAccessException ex){
+            log.error(ex.toString());
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
+        return "redirect:/board/board_list";
+    }
+
     @GetMapping("/board_delete")
     public String boardDelete(Model model, @RequestParam Long id){
         try{
