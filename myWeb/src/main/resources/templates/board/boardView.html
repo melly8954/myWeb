@@ -15,11 +15,11 @@
             <span>likeqty : {{likeQty}}</span>
             <span>createName : {{createName}}</span>
             <span>createdt : {{createDt}}</span>
+            <!-- updateDt가 null이면 다른 메시지 표시 -->
+            <span>updateDt : {{#updateDt}}{{updateDt}}{{/updateDt}}{{^updateDt}}수정하지 않은 원본 글{{/updateDt}}</span>
         </li>
         {{/boardView}}
    </ul>
-
-
     <button onclick="goBack();">뒤로</button>
     <button onclick="categoryDelete();">삭제</button>
     <button onclick="categoryUpdate();">수정</button>
