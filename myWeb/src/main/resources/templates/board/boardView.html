@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 상세내용</title>
+</head>
+<body>
+    <ul>
+        {{#boardView}}
+        <li>
+            <span>id : {{id}}</span>
+            <span>title : {{title}}</span>
+            <span>content : {{content}}</span>
+            <span>viewqty : {{viewQty}}</span>
+            <span>likeqty : {{likeQty}}</span>
+            <span>createName : {{createName}}</span>
+            <span>createdt : {{createDt}}</span>
+        </li>
+        {{/boardView}}
+   </ul>
+
+
+    <button onclick="goBack();">뒤로</button>
+    <button onclick="categoryDelete();">삭제</button>
+    <button onclick="categoryUpdate();">수정</button>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
+</body>
+<script>
+    const goBack = () => {
+        history.back();
+    }
+
+    function categoryUpdate() {
+        let name = $("#name").val();
+        if (confirm(name + " 수정 하시겠습니까 ?")) {
+            document.form.method = "post";
+            document.form.action = "category_update";
+            document.form.submit();
+        }
+    }
+    function categoryDelete() {
+        let id = $("#id").val();
+        let name = $("#name").val();
+        if (confirm(name + " 삭제 하시겠습니까 ?")) {
+            $("#form").attr("method","get");
+            $("#form").attr("action","category_delete?id=" + id).submit();
+        }
+    }
+</script>
+</html>

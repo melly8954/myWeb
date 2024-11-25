@@ -17,7 +17,7 @@
     </div>
     <div>
         <ul id="BoardList"></ul>
-        <button onclick="location.href='/board/boardInsert_movement'">게시글 등록</button><a href="/board/boardInsert_movement">게시글 등록</a>
+        <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
     </div>
 
 </body>
@@ -56,14 +56,15 @@
             let createName = boardList[i].createName;
             let createDt = boardList[i].createDt;
             let updateDt = boardList[i].updateDt;
-            let strLi = `<li><div><span>id : ${id}</span>
+            let strLi = `<a href="board_view?id=${id}">
+                         <li><div><span>id : ${id}</span>
                                   <span>title : ${title}</span>
                                   <span>content : ${content}</span>
                                   <span>viewqty : ${viewQty}</span>
                                   <span>likeqty : ${likeQty}</span>
                                   <span>createName : ${createName}</span>
                                   <span>createdt : ${createDt}</span>
-                                  <span>updateDt : ${updateDt}</span></div></li>`;
+                                  <span>updateDt : ${updateDt}</span></div></li></a>`;
             list.append(strLi);
         }
     }

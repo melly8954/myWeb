@@ -70,7 +70,7 @@
             LEFT OUTER JOIN user_tbl AS ut on bt.updateId = ut.id
             LEFT OUTER JOIN user_tbl AS dt on bt.deleteId = dt.id
         WHERE bt.id = #{id}
-        AND bt.deleteYn = false
+        AND bt.deleteFlag = false
     </select>
 
 
