@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,5 +82,20 @@ public class BoardController implements IResponseController {
             log.error(ex.toString());
         }
         return "board/boardView";
+    }
+
+    @GetMapping("/board_delete")
+    public String boardDelete(Model model, @RequestParam Long id){
+        try{
+            CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
+            BoardDto find = this.boardService.findById(id);
+            this.boardService.updateDeleteFlag(cudInfoDto,find);
+            this.boardService.deleteById(id);
+        }catch (LoginAccessException ex){
+            log.error(ex.toString());
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
+        return "redirect:/board/board_list";
     }
 }

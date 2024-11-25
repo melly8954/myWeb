@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>게시판 상세내용</title>
+    <link rel="stylesheet" href="/css/boardView.css">
 </head>
 <body>
-    <ul>
+    <ul id="board_view">
         {{#boardView}}
         <li>
             <span>id : {{id}}</span>
@@ -21,17 +22,24 @@
         {{/boardView}}
    </ul>
     <button onclick="goBack();">뒤로</button>
-    <button onclick="categoryDelete();">삭제</button>
-    <button onclick="categoryUpdate();">수정</button>
+    <div id="modifyDeleteBtns" class ="hidden">
+        <button onclick="boardUpdate();">수정</button>
+        <button onclick="boardDelete();">삭제</button>
+    </div>
+
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 </body>
 <script>
+    $(function () {
+        setCreateUserByButton();
+    });
+
     const goBack = () => {
         history.back();
     }
 
-    function categoryUpdate() {
+    function boardUpdate() {
         let name = $("#name").val();
         if (confirm(name + " 수정 하시겠습니까 ?")) {
             document.form.method = "post";
@@ -39,13 +47,21 @@
             document.form.submit();
         }
     }
-    function categoryDelete() {
-        let id = $("#id").val();
-        let name = $("#name").val();
-        if (confirm(name + " 삭제 하시겠습니까 ?")) {
-            $("#form").attr("method","get");
-            $("#form").attr("action","category_delete?id=" + id).submit();
+    function boardDelete() {
+        let id = {{boardView.id}}
+        if (confirm(id+"번 게시글을 삭제 하시겠습니까 ?")) {
+            window.location.href = "/board/board_delete?id=" + id;
         }
     }
+    // 수정 삭제 버튼 존재 여부
+    function setCreateUserByButton() {
+        const createName = "{{boardView.createName}}";
+        const loggedInUser = "{{webUser.nickname}}";
+
+        if (createName === loggedInUser) {
+            $("#modifyDeleteBtns").removeClass('hidden');
+        }
+    }
+
 </script>
 </html>

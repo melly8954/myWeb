@@ -41,9 +41,9 @@
     </update>
 
     <!-- 게시글 삭제 -->
-    <delete id="delete" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         UPDATE board_tbl
-        SET deleteYn = TRUE
+        SET deleteFlag = true
         WHERE id = #{id}
     </delete>
 
@@ -95,6 +95,8 @@
             LEFT OUTER JOIN user_tbl AS ct on bt.createId = ct.id
             LEFT OUTER JOIN user_tbl AS ut on bt.updateId = ut.id
             LEFT OUTER JOIN user_tbl AS dt on bt.deleteId = dt.id
+        WHERE 1=1
+          AND bt.deleteFlag = false
     </select>
 
 
