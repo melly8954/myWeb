@@ -29,8 +29,12 @@
         history.back();
     }
     function addBoard() {
-        let ret = confirm(" 추가 하시겠습니까 ?");
-        return ret;
+        let ret = confirm("추가 하시겠습니까?");
+        if (ret) {
+            return true;  // 확인 버튼을 눌렀을 때 폼을 제출
+        } else {
+            return false; // 취소 버튼을 눌렀을 때 폼 제출을 막음
+        }
     }
 </script>
 </html>
