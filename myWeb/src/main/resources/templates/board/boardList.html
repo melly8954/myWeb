@@ -19,7 +19,7 @@
         <ul id="BoardList"></ul>
         <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
     </div>
-
+    <button onclick="goBack();">뒤로</button>
 </body>
 <script>
     $(function () {
@@ -67,6 +67,9 @@
                                   <span>updateDt : ${updateDt}</span></div></li></a>`;
             list.append(strLi);
         }
+    }
+    const goBack = () => {
+        location.href="/";
     }
 </script>
 </html>
