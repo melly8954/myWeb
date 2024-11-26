@@ -103,10 +103,17 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
-    public void addViewQty(Long id) {
+    public void addViewQty(Long id,Long userId) {
         if ( id == null || id <= 0 ) {
             return;
         }
+
+        // 본인이 작성한 글은 조회수 증가 X
+        BoardDto find = this.boardMybatisMapper.findById(id);
+        if( find.getCreateId().equals(userId) ){
+            return;
+        }
+
         this.boardMybatisMapper.addViewQty(id);
     }
 

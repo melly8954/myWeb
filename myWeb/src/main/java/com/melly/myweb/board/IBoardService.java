@@ -13,7 +13,7 @@ public interface IBoardService extends IServiceCRUD<BoardDto> {
     Integer countAllByNameContains(SearchQueryDto searchQueryDto);
     List<BoardDto> findAllByNameContains(SearchQueryDto searchQueryDto);
 
-    void addViewQty(Long id);
+    void addViewQty(Long id,Long userId);
     void addLikeQty(CUDInfoDto cudInfoDto, Long id);
     void subLikeQty(CUDInfoDto cudInfoDto, Long id);
 }

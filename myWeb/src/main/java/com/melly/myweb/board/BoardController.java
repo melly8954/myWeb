@@ -75,6 +75,7 @@ public class BoardController implements IResponseController {
         try{
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
             IBoard find  = this.boardService.findById(id);
+            this.boardService.addViewQty(id, find.getId());
             model.addAttribute("boardView",find);
         }catch (LoginAccessException ex){
             log.error(ex.toString());
