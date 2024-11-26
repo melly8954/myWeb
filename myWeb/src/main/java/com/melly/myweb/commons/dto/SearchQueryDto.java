@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchQueryDto {
     private String orderByWord;
-    private String searchName;
+    private String searchTitle;
     private String sortColumn;
     private String sortAscDsc;
     private Integer rowsOnePage;
