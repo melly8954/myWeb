@@ -44,8 +44,10 @@
         <ul id="BoardList"></ul>
         <div>total : <span id="total"></span></div>
         <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
+        <div id="pageDiv">
+        </div>
     </div>
-    <button onclick="goBack();">뒤로</button>
+    <button onclick="goBack();">홈 화면 이동</button>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 </body>
@@ -66,7 +68,8 @@
         })
 
         $("#rowsOnePage").change(function (){
-            rowsOnePage = $("#rowsOnePage").val();
+            // Select 의 value 값은 문자열로 받음 >> 숫자로 바꾸기 위한 Number() 사용
+            rowsOnePage = Number($("#rowsOnePage").val());
             $.searchBoardList(1);
         })
 
@@ -118,6 +121,7 @@
             if (status === "success") {
                 $("#total").html(data.responseData.total);   // id="total" 요소의 <요소>문자</요소> html 의 문자를 설정한다.
                 $.showBoardList(data.responseData.dataList);
+                $.makePageUI(data.responseData.total,page);
             }
         }).fail(function (jqXHR, status, errorThrown) {
             // ajax 의 요청이 실패하면 실행한다.
@@ -176,6 +180,53 @@
         sortColumn = "title";
         sortAscDesc = "DESC";
         $.searchBoardList(page);
+    }
+
+    $.makePageUI = function (paramTotal, paramPage) {
+        // paramTotal : 전체 데이터 수
+        // paramPage : 현재 페이지 번호
+        let totPage = ~~((paramTotal + rowsOnePage - 1) / rowsOnePage);    // 전체 페이지 수
+        let startPage = getStartPage(paramPage);
+        let endPage = getEndPage(startPage, paramTotal);
+        let prev = (paramPage - 1) < 1 ? 1 : paramPage - 1;
+        let next = (paramPage + 1) >= totPage ? totPage : paramPage + 1;
+        // let sClass = "btn btn-success rounded-pill";
+        // class="${sClass}"
+
+        $("#pageDiv").children().remove();
+        $("#pageDiv").append(`<a onclick="$.searchBoardList(${prev});">Prev</a>`);
+
+        for (let i = startPage; i <= endPage; i++) {
+            if (paramPage == i) {
+                // sClass = "btn btn-primary rounded-pill";
+            }
+            $("#pageDiv").append(`<a onclick="$.searchBoardList(${i});">${i}</a>`);
+            // sClass = "btn btn-success rounded-pill";
+        }
+
+        $("#pageDiv").append(`<a onclick="$.searchBoardList(${next});">Next</a>`);
+    }
+
+    function getStartPage(page) {
+        // 1~10 => 1, 11~20 => 11, 21~30 => 21
+        // let startPage = ((page - 1) / 10) * 10 + 1;
+        let one = 1;
+        let ten = ~~((page - 1) / 10) * 10;
+        let startPage = ten + one;
+        return ~~(startPage);
+    }
+
+    function getEndPage(startPage, paramTotal) {
+        // 시작페이지와 마지막페이지와 최종페이지 번호를 각각 비교해서
+        // 1~56, 시작페이지 : 1,2,3,4,5,6,7,8,9,10 => end = 10
+        // 1~56, 시작페이지 : 21,22,23,24,25,26,27,28,29,30 => end = 30
+        // 1~56, 시작페이지 : 51,52,53,54,55,56 => end = 56
+        let totPage = ~~((paramTotal + rowsOnePage - 1) / rowsOnePage);
+        let tPage = startPage + 9;
+        if (tPage < totPage) {
+            return ~~(tPage);
+        }
+        return ~~(totPage);
     }
 
     const goBack = () => {
