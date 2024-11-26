@@ -41,23 +41,23 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
         }
     }
 
-    @GetMapping("/showBoardList")
-    public ResponseEntity<ResponseDto> findAllBoardList(Model model){
-        try{
-            makeResponseCheckLogin(model);
-            List<BoardDto> list = this.boardService.findGetAll();
-            return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",list);
-        }catch (LoginAccessException ex){
-            log.error(ex.toString());
-            return makeResponseEntity(HttpStatus.FORBIDDEN,ResponseCode.R888881, ex.getMessage(),null);
-        }catch (IdNotFoundException ex){
-            log.error(ex.toString());
-            return makeResponseEntity(HttpStatus.NOT_FOUND,ResponseCode.R000041, ex.getMessage(),null);
-        }catch (Exception ex){
-            log.error(ex.toString());
-            return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999, ex.getMessage(),null);
-        }
-    }
+//    @GetMapping("/showBoardList")
+//    public ResponseEntity<ResponseDto> findAllBoardList(Model model){
+//        try{
+//            makeResponseCheckLogin(model);
+//            List<BoardDto> list = this.boardService.findGetAll();
+//            return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",list);
+//        }catch (LoginAccessException ex){
+//            log.error(ex.toString());
+//            return makeResponseEntity(HttpStatus.FORBIDDEN,ResponseCode.R888881, ex.getMessage(),null);
+//        }catch (IdNotFoundException ex){
+//            log.error(ex.toString());
+//            return makeResponseEntity(HttpStatus.NOT_FOUND,ResponseCode.R000041, ex.getMessage(),null);
+//        }catch (Exception ex){
+//            log.error(ex.toString());
+//            return makeResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,ResponseCode.R999999, ex.getMessage(),null);
+//        }
+//    }
 
     @PostMapping("/searchTitle")
     public ResponseEntity<ResponseDto> findAllByNameContains(Model model, @Validated @RequestBody SearchQueryDto searchQueryDto){

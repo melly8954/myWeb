@@ -28,10 +28,10 @@ public class BoardController implements IResponseController {
     private IBoardService boardService;
 
     @GetMapping("/board_list")
-    public String boardList(Model model) {
+    public String boardList(Model model,@ModelAttribute SearchQueryDto searchQueryDto) {
         try{
             makeResponseCheckLogin(model);
-            List<BoardDto> list =  this.boardService.findGetAll();
+            List<BoardDto> list =  this.boardService.findAllByNameContains(searchQueryDto);
             model.addAttribute("boardList",list);
         }catch (LoginAccessException ex){
             log.error(ex.toString());

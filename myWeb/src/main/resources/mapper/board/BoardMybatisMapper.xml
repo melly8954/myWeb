@@ -74,30 +74,30 @@
     </select>
 
 
-    <!-- 게시글 리스트 & 해당 글에 달린 댓글 개수 조회 -->
-    <select id="findGetAll" resultType="BoardDto">
-        SELECT bt.id
-             , bt.title
-             , bt.content
-             , bt.viewQty
-             , bt.likeQty
-             , bt.createId
-             , bt.createDt
-             , ct.nickname As createName
-             , bt.updateId
-             , bt.updateDt
-             , ut.nickname As updateName
-             , bt.deleteId
-             , bt.deleteDt
-             , dt.nickname As deleteName
-             , bt.deleteFlag
-        FROM board_tbl AS bt
-            LEFT OUTER JOIN user_tbl AS ct on bt.createId = ct.id
-            LEFT OUTER JOIN user_tbl AS ut on bt.updateId = ut.id
-            LEFT OUTER JOIN user_tbl AS dt on bt.deleteId = dt.id
-        WHERE 1=1
-          AND bt.deleteFlag = false
-    </select>
+<!--    &lt;!&ndash; 모든 게시글 조회 &ndash;&gt;-->
+<!--    <select id="findGetAll" resultType="BoardDto">-->
+<!--        SELECT bt.id-->
+<!--             , bt.title-->
+<!--             , bt.content-->
+<!--             , bt.viewQty-->
+<!--             , bt.likeQty-->
+<!--             , bt.createId-->
+<!--             , bt.createDt-->
+<!--             , ct.nickname As createName-->
+<!--             , bt.updateId-->
+<!--             , bt.updateDt-->
+<!--             , ut.nickname As updateName-->
+<!--             , bt.deleteId-->
+<!--             , bt.deleteDt-->
+<!--             , dt.nickname As deleteName-->
+<!--             , bt.deleteFlag-->
+<!--        FROM board_tbl AS bt-->
+<!--            LEFT OUTER JOIN user_tbl AS ct on bt.createId = ct.id-->
+<!--            LEFT OUTER JOIN user_tbl AS ut on bt.updateId = ut.id-->
+<!--            LEFT OUTER JOIN user_tbl AS dt on bt.deleteId = dt.id-->
+<!--        WHERE 1=1-->
+<!--          AND bt.deleteFlag = false-->
+<!--    </select>-->
 
     <!-- 게시글 리스트 & 해당 글에 달린 댓글 개수 조회 -->
     <select id="findAllByNameContains" parameterType="SearchQueryDto" resultType="BoardDto">

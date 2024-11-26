@@ -77,11 +77,11 @@ public class BoardServiceImpl implements IBoardService {
         return find;
     }
 
-    @Override
-    public List<BoardDto> findGetAll() {
-        List<BoardDto> list = this.boardMybatisMapper.findGetAll();
-        return list;
-    }
+//    @Override
+//    public List<BoardDto> findGetAll() {
+//        List<BoardDto> list = this.boardMybatisMapper.findGetAll();
+//        return list;
+//    }
 
     @Override
     public List<BoardDto> findAllByNameContains(SearchQueryDto searchQueryDto) {
