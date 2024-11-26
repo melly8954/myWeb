@@ -31,7 +31,7 @@ public class BoardController implements IResponseController {
     public String boardList(Model model) {
         try{
             makeResponseCheckLogin(model);
-            List<BoardDto> list =  this.boardService.findAllByNameContains();
+            List<BoardDto> list =  this.boardService.findGetAll();
             model.addAttribute("boardList",list);
         }catch (LoginAccessException ex){
             log.error(ex.toString());

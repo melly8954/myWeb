@@ -13,5 +13,5 @@ public interface IBoardMybatisMapper extends IMybatisCRUD<BoardDto> {
     void subLikeQty(Long id);
 
     Integer countAllByNameContains(SearchQueryDto searchQueryDto);
-    List<BoardDto> findAllByNameContains();
+    List<BoardDto> findGetAll();
 }

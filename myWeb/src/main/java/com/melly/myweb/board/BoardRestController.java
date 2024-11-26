@@ -29,7 +29,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     public ResponseEntity<ResponseDto> findAllBoardList(Model model){
         try{
             makeResponseCheckLogin(model);
-            List<BoardDto> list = this.boardService.findAllByNameContains();
+            List<BoardDto> list = this.boardService.findGetAll();
             return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",list);
         }catch (LoginAccessException ex){
             log.error(ex.toString());
