@@ -21,6 +21,10 @@
         </li>
         {{/boardView}}
    </ul>
+    <div>
+        <img id="likeIcon" width="40px" alt="Like" onclick="$.likeItem();"/>
+        <span id="likeQty">{{boardView.likeQty}}</span>
+    </div>
     <button onclick="goBack();">뒤로</button>
     <div id="modifyDeleteBtns" class ="hidden">
         <button onclick="boardUpdate();">수정</button>
@@ -32,7 +36,12 @@
 </body>
 <script>
     $(function () {
-        setCreateUserByButton();
+        setCreateUserByButton()
+
+        let selfLike = "{{boardView.updateDt}}" * 1;
+        var unlikeIcon = "/svg/heartOff.svg";
+        var likeIcon = "/svg/heartOn.svg";
+        $("#likeIcon").attr("src", (selfLike > 0 ? likeIcon : unlikeIcon));
     });
 
     const goBack = () => {
@@ -61,5 +70,39 @@
         }
     }
 
+    $.likeItem = function (){
+        let likeIcon = $("#likeIcon");
+        let src = likeIcon.attr("src");
+        let bOff = src.includes("Off");
+        let id = {{boardView.id}}
+        if (id <= 0) {
+            return;
+        }
+        let url = bOff ? "/api/board/like/" + id : "/api/board/unlike/" + id;
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            datatype: "JSON",
+            contentType: "application/json; charset=UTF-8",
+        }).done(function (data, status, xhr) {
+            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            if (status === "success") {
+                //좋아요 개수 업데이트
+                $("#likeQty").text(data.responseData.likeQty);
+
+                // 좋아요 상태에 따른 아이콘 업데이트
+                let count = data.responseData.updateDt * 1;
+                if (count > 0) {
+                    likeIcon.attr("src", "/svg/heartOff.svg");
+                } else {
+                    likeIcon.attr("src", "/svg/heartOn.svg");
+                }
+            }
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+            alert("실패 했습니다. " + jqXHR.responseJSON.message);
+        });
+    }
 </script>
 </html>

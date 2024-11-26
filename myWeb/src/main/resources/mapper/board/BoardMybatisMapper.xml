@@ -157,7 +157,7 @@
     <!-- 좋아요 제거 할 경우 -->
     <update id="subLikeQty">
         UPDATE board_tbl
-        SET likeQty = likeQty + 1
+        SET likeQty = likeQty - 1
         WHERE id = #{id}
         AND deleteFlag = false
     </update>
