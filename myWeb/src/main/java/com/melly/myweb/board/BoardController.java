@@ -99,10 +99,9 @@ public class BoardController implements IResponseController {
     }
 
     @PostMapping("/board_update")
-    public String boardUpdate(Model model, @RequestParam Long id){
+    public String boardUpdate(Model model, @RequestParam Long id, @ModelAttribute BoardDto boardDto){
         try{
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
-            BoardDto boardDto = BoardDto.builder().build();
             this.boardService.update(cudInfoDto,boardDto);
         }catch (LoginAccessException ex){
             log.error(ex.toString());
