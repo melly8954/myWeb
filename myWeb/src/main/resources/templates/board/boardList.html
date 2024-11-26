@@ -33,15 +33,16 @@
                 <span>
                     <label for="rowsOnePage">Row</label>
                     <select id="rowsOnePage">
-                        <option value="5">5</option>
-                        <option selected value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
+                        <option value="5">5개씩</option>
+                        <option selected value="10">10개씩</option>
+                        <option value="20">20개씩</option>
+                        <option value="30">30개씩</option>
                     </select>
                 </span>
             </li>
         </ul>
         <ul id="BoardList"></ul>
+        <div>total : <span id="total"></span></div>
         <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
     </div>
     <button onclick="goBack();">뒤로</button>
@@ -56,7 +57,7 @@
     let rowsOnePage = 10;
 
     $(function () {
-        getAllList();
+        $.searchBoardList(1);
 
         $("#searchTitle").on("keyup",function (key){
             if(key.keyCode===13){
@@ -71,48 +72,25 @@
 
     })
 
-   function getAllList(){
-        $.ajax({    // jQuery Ajax 비동기 서버와 통신
-            url: "/api/board/showBoardList",  // 서버 주소
-            type: "GET",   // method 방식
-            datatype: "JSON",   // 전송하는 데이터 방식
-            data: null,
-            // 전송하는 실제 데이터 JSON 을 사용했다.
-            contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
-        }).done(function (data, status, xhr) {
-            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
-            if (status === "success") {
-                $.showBoardList(data.responseData);
-            }
-        }).fail(function (jqXHR, status, errorThrown) {
-            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
-            alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
-        });
-    }
-    $.showBoardList = function (boardList) {
-        const list = $("#BoardList");
-        list.children().remove();
-        for (let i = 0; i < boardList.length; i++) {
-            let id = boardList[i].id;
-            let title = boardList[i].title;
-            let content = boardList[i].content;
-            let viewQty = boardList[i].viewQty;
-            let likeQty = boardList[i].likeQty;
-            let createName = boardList[i].createName;
-            let createDt = boardList[i].createDt;
-            let updateDt = boardList[i].updateDt;
-            let strLi = `<a href="board_view?id=${id}">
-                         <li><div><span>id : ${id}</span>
-                                  <span>title : ${title}</span>
-                                  <span>content : ${content}</span>
-                                  <span>viewqty : ${viewQty}</span>
-                                  <span>likeqty : ${likeQty}</span>
-                                  <span>createName : ${createName}</span>
-                                  <span>createdt : ${createDt}</span>
-                                  <span>updateDt : ${updateDt}</span></div></li></a>`;
-            list.append(strLi);
-        }
-    }
+   // function getAllList(){
+   //      $.ajax({    // jQuery Ajax 비동기 서버와 통신
+   //          url: "/api/board/showBoardList",  // 서버 주소
+   //          type: "GET",   // method 방식
+   //          datatype: "JSON",   // 전송하는 데이터 방식
+   //          data: null,
+   //          // 전송하는 실제 데이터 JSON 을 사용했다.
+   //          contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
+   //      }).done(function (data, status, xhr) {
+   //          console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+   //          if (status === "success") {
+   //              $("#total").html(data.responseData.total);   // id="total" 요소의 <요소>문자</요소> html 의 문자를 설정한다.
+   //              $.showBoardList(data.responseData);
+   //          }
+   //      }).fail(function (jqXHR, status, errorThrown) {
+   //          console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+   //          alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
+   //      });
+   //  }
 
     $.searchBoardList = function (n){
         page = n;
@@ -149,6 +127,31 @@
             console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
             alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
         });
+    }
+
+    $.showBoardList = function (boardList) {
+        const list = $("#BoardList");
+        list.children().remove();
+        for (let i = 0; i < boardList.length; i++) {
+            let id = boardList[i].id;
+            let title = boardList[i].title;
+            let content = boardList[i].content;
+            let viewQty = boardList[i].viewQty;
+            let likeQty = boardList[i].likeQty;
+            let createName = boardList[i].createName;
+            let createDt = boardList[i].createDt;
+            let updateDt = boardList[i].updateDt;
+            let strLi = `<a href="board_view?id=${id}">
+                         <li><div><span>id : ${id}</span>
+                                  <span>title : ${title}</span>
+                                  <span>content : ${content}</span>
+                                  <span>viewqty : ${viewQty}</span>
+                                  <span>likeqty : ${likeQty}</span>
+                                  <span>createName : ${createName}</span>
+                                  <span>createdt : ${createDt}</span>
+                                  <span>updateDt : ${updateDt}</span></div></li></a>`;
+            list.append(strLi);
+        }
     }
 
     $.idAsc = function (){
