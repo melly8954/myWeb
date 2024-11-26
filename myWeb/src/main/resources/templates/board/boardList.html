@@ -6,7 +6,6 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>게시판 목록</title>
-    <script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div>
@@ -14,19 +13,65 @@
         <p>자유롭게 글을 남겨 보세요</p>
     </div>
     <div>
+        <label for="searchTitle">검색창</label>
+        <input id="searchTitle" name="searchTitle" type="text" value="">
+        <button onclick="$.searchBoardList(1)">검색</button>
     </div>
     <div>
+        <ul>
+            <li>
+                <span>id
+                    <button onclick="$.idAsc();">△</button>
+                    <button onclick="$.idDesc();">▽</button>
+                </span>
+                <span> : </span>
+                <span>title
+                        <button onclick="$.titleAsc();">△</button>
+                        <button onclick="$.titleDesc();">▽</button>
+                </span>
+                <span> : </span>
+                <span>
+                    <label for="rowsOnePage">Row</label>
+                    <select id="rowsOnePage">
+                        <option value="5">5</option>
+                        <option selected value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </span>
+            </li>
+        </ul>
         <ul id="BoardList"></ul>
         <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
     </div>
     <button onclick="goBack();">뒤로</button>
+
+<script src="/js/jquery-3.7.1.min.js"></script>
 </body>
 <script>
+    let page = 0;
+    let total = 0;
+    let sortColumn = "id";
+    let sortAscDesc = "DESC";
+    let rowsOnePage = 10;
+
     $(function () {
-       searchBoardList();
+        getAllList();
+
+        $("#searchTitle").on("keyup",function (key){
+            if(key.keyCode===13){
+                $.searchBoardList(1);
+            }
+        })
+
+        $("#rowsOnePage").change(function (){
+            rowsOnePage = $("#rowsOnePage").val();
+            $.searchBoardList(1);
+        })
+
     })
 
-   function searchBoardList(){
+   function getAllList(){
         $.ajax({    // jQuery Ajax 비동기 서버와 통신
             url: "/api/board/showBoardList",  // 서버 주소
             type: "GET",   // method 방식
@@ -68,6 +113,68 @@
             list.append(strLi);
         }
     }
+
+    $.searchBoardList = function (n){
+        page = n;
+        let searchTitle = $("#searchTitle").val();
+        $.ajax({    // jQuery Ajax 비동기 서버와 통신
+            url: "/api/board/searchTitle",  // 서버 주소
+            type: "POST",   // method 방식
+            datatype: "JSON",   // 전송하는 데이터 방식
+            data: JSON.stringify({
+                "page": page,
+                "searchTitle": searchTitle,
+                "sortColumn": sortColumn,
+                "sortAscDsc": sortAscDesc,
+                "rowsOnePage": rowsOnePage,
+            }),
+            // 전송하는 실제 데이터 JSON 을 사용했다.
+            contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
+        }).done(function (data, status, xhr) {
+            // ajax 의 요청이 완료되서 응답이 오면 실행한다.
+            // data : 실제 응답 데이터
+            // status : http 응답 성공 일 경우 "success"
+            // xhr : 부가 정보
+            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            // javascript 기본 객체 console 에 프린트한다.
+            if (status === "success") {
+                $("#total").html(data.responseData.total);   // id="total" 요소의 <요소>문자</요소> html 의 문자를 설정한다.
+                $.showBoardList(data.responseData.dataList);
+            }
+        }).fail(function (jqXHR, status, errorThrown) {
+            // ajax 의 요청이 실패하면 실행한다.
+            // jqXHR : 부가 정보
+            // status : http 응답, 4XX, 5XX
+            // errorThrown : error 를 던진 곳의 정보
+            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+            alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
+        });
+    }
+
+    $.idAsc = function (){
+        sortColumn = "id";
+        sortAscDesc = "ASC";
+        $.searchBoardList(page);
+    }
+
+    $.idDesc = function (){
+        sortColumn = "id";
+        sortAscDesc = "DESC";
+        $.searchBoardList(page);
+    }
+
+    $.titleAsc = function (){
+        sortColumn = "title";
+        sortAscDesc = "ASC";
+        $.searchBoardList(page);
+    }
+
+    $.titleDesc = function (){
+        sortColumn = "title";
+        sortAscDesc = "DESC";
+        $.searchBoardList(page);
+    }
+
     const goBack = () => {
         location.href="/";
     }

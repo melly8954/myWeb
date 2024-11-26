@@ -11,6 +11,7 @@ import java.util.List;
 public interface IBoardService extends IServiceCRUD<BoardDto> {
     List<BoardDto> findGetAll();
     Integer countAllByNameContains(SearchQueryDto searchQueryDto);
+    List<BoardDto> findAllByNameContains(SearchQueryDto searchQueryDto);
 
     void addViewQty(Long id);
     void addLikeQty(CUDInfoDto cudInfoDto, Long id);
