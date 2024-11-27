@@ -164,7 +164,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
                 .build();
 
         Integer likeCount = this.boardLikeMybatisMapper.countByLike(boardLikeDto);
-        result.setLikeRecord(likeCount == 1);
+        result.setLikeRecord(likeCount == 1);       // 1일 경우 true -> 좋아요를 누른 경우
         return result;
     }
     @Override
