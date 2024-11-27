@@ -38,10 +38,11 @@
     $(function () {
         setCreateUserByButton()
 
-        let selfLike = "{{boardView.updateDt}}" * 1;
+        let selfLike = "{{boardView.likeRecord}}" === 'true'; // 불리언 값으로 변환
         var unlikeIcon = "/svg/heartOff.svg";
         var likeIcon = "/svg/heartOn.svg";
-        $("#likeIcon").attr("src", (selfLike > 0 ? likeIcon : unlikeIcon));
+        $("#likeIcon").attr("src", (selfLike ? likeIcon : unlikeIcon));
+        console.log("하트 :"+$("#likeIcon").attr("src"));
     });
 
     const goBack = () => {
@@ -92,11 +93,11 @@
                 $("#likeQty").text(data.responseData.likeQty);
 
                 // 좋아요 상태에 따른 아이콘 업데이트
-                let count = data.responseData.updateDt * 1;
-                if (count > 0) {
-                    likeIcon.attr("src", "/svg/heartOn.svg");
-                } else {
+                let count = data.responseData.likeRecord;
+                if (count == 0) {
                     likeIcon.attr("src", "/svg/heartOff.svg");
+                } else {
+                    likeIcon.attr("src", "/svg/heartOn.svg");
                 }
             }
         }).fail(function (jqXHR, status, errorThrown) {

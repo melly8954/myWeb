@@ -27,4 +27,5 @@ public class BoardDto extends BaseDto implements IBoard {
     public String getTbl() {
         return "board";
     }
+    private Boolean likeRecord;
 }

@@ -82,14 +82,14 @@ public class BoardController implements IResponseController {
             IBoard find  = this.boardService.findById(id);
             this.boardService.addViewQty(id, find.getId());
 
-            // 좋아요 개수 조회
+            // 게시판에 좋아요를 누른 사용자 확인
             BoardLikeDto boardLikeDto = BoardLikeDto.builder()
                     .tbl(new BoardDto().getTbl())
                     .createId(cudInfoDto.getLoginUser().getId())
                     .boardId(id)
                     .build();
             Integer likeCount = this.boardLikeService.countByLike(boardLikeDto);
-            find.setUpdateDt(likeCount.toString());
+            find.setLikeRecord(likeCount == 1);     // 1일 경우 true -> 좋아요를 누른 경우
             find.copyFields(find);
 
             model.addAttribute("boardView",find);

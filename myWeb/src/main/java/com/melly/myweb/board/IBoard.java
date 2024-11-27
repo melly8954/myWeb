@@ -20,6 +20,9 @@ public interface IBoard extends IBase {
 
     String getTbl();
 
+    Boolean getLikeRecord();
+    void setLikeRecord(Boolean likeRecord);
+
     default void copyFields(IBoard from) {
         if (from == null) {
             return;
@@ -38,6 +41,9 @@ public interface IBoard extends IBase {
         }
         if (from.getLikeQty() != null) {
             this.setLikeQty(from.getLikeQty());
+        }
+        if (from.getLikeRecord() != null){
+            this.setLikeRecord(from.getLikeRecord());
         }
         IBase.super.copyFields(from);
     }
