@@ -94,9 +94,9 @@
                 // 좋아요 상태에 따른 아이콘 업데이트
                 let count = data.responseData.updateDt * 1;
                 if (count > 0) {
-                    likeIcon.attr("src", "/svg/heartOff.svg");
-                } else {
                     likeIcon.attr("src", "/svg/heartOn.svg");
+                } else {
+                    likeIcon.attr("src", "/svg/heartOff.svg");
                 }
             }
         }).fail(function (jqXHR, status, errorThrown) {

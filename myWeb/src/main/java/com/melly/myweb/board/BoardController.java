@@ -1,6 +1,8 @@
 package com.melly.myweb.board;
 
 
+import com.melly.myweb.board.like.BoardLikeDto;
+import com.melly.myweb.board.like.IBoardLikeService;
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.SearchQueryDto;
 import com.melly.myweb.commons.exception.LoginAccessException;
@@ -26,6 +28,9 @@ import java.util.List;
 public class BoardController implements IResponseController {
     @Autowired
     private IBoardService boardService;
+
+    @Autowired
+    private IBoardLikeService boardLikeService;
 
     @GetMapping("/board_list")
     public String boardList(Model model,@ModelAttribute SearchQueryDto searchQueryDto) {
@@ -76,6 +81,17 @@ public class BoardController implements IResponseController {
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
             IBoard find  = this.boardService.findById(id);
             this.boardService.addViewQty(id, find.getId());
+
+            // 좋아요 개수 조회
+            BoardLikeDto boardLikeDto = BoardLikeDto.builder()
+                    .tbl(new BoardDto().getTbl())
+                    .createId(cudInfoDto.getLoginUser().getId())
+                    .boardId(id)
+                    .build();
+            Integer likeCount = this.boardLikeService.countByLike(boardLikeDto);
+            find.setUpdateDt(likeCount.toString());
+            find.copyFields(find);
+
             model.addAttribute("boardView",find);
         }catch (LoginAccessException ex){
             log.error(ex.toString());
