@@ -53,7 +53,6 @@ flush privileges;
 ```
 -- 1. user_tbl
 -- myweb_db.user_tbl definition
-
 CREATE TABLE `user_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `loginId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -70,9 +69,9 @@ CREATE TABLE `user_tbl` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 -- 2. board_tbl
 -- myweb_db.board_tbl definition
-
 CREATE TABLE `board_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -98,9 +97,9 @@ CREATE TABLE `board_tbl` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
 -- 3. board_like_tbl
 -- myweb_db.board_like_tbl definition
-
 CREATE TABLE `board_like_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `tbl` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -113,63 +112,119 @@ CREATE TABLE `board_like_tbl` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 4. board_comment_tbl
--- myweb_db.board_comment_tbl definition
 
+-- 4. board_comment_tbl
+-- myweb_db.board_file_tbl definition
 CREATE TABLE `board_comment_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tbl` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `comment` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `boardId` bigint unsigned NOT NULL,
-  `comment` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `createDt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `createId` bigint DEFAULT NULL,
-  `likeQty` int NOT NULL DEFAULT '0',
+  `likeQty` int DEFAULT '0',
+  `createId` bigint unsigned DEFAULT NULL,
+  `createDt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `updateId` bigint unsigned DEFAULT NULL,
   `updateDt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `deleteYn` tinyint(1) NOT NULL DEFAULT '0',
+  `deleteId` bigint unsigned DEFAULT NULL,
+  `deleteDt` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `deleteFlag` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `board_comment_tbl_board_tbl_FK` (`tbl`,`boardId`),
-  KEY `board_comment_tbl_member_tbl_createId` (`createId`),
-  KEY `board_comment_tbl_boardId_IDX` (`tbl`,`boardId`,`deleteYn`) USING BTREE,
-  KEY `board_comment_tbl_id_IDX` (`id`,`deleteYn`) USING BTREE,
-  CONSTRAINT `board_comment_tbl_user_tbl_FK` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `board_comment_tbl_board_tbl_FK` (`boardId`),
+  KEY `board_comment_tbl_user_tbl_createId` (`createId`),
+  KEY `board_comment_tbl_user_tbl_updateId` (`updateId`),
+  KEY `board_comment_tbl_user_tbl_deleteId` (`deleteId`),
+  KEY `board_comment_tbl_boardId_IDX` (`boardId`,`deleteFlag`) USING BTREE,
+  KEY `board_comment_tbl_id_IDX` (`id`,`deleteFlag`) USING BTREE,
+  CONSTRAINT `board_comment_tbl_board_tbl_FK` FOREIGN KEY (`boardId`) REFERENCES `board_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `board_comment_tbl_user_tbl_createId` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `board_comment_tbl_user_tbl_deleteId` FOREIGN KEY (`deleteId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `board_comment_tbl_user_tbl_updateId` FOREIGN KEY (`updateId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 
--- 5. board_file_tbl
+-- 5. comment_like_tbl
+-- myweb_db.comment_like_tbl definition
+CREATE TABLE `comment_like_tbl` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `commentTbl` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `createId` bigint unsigned NOT NULL,
+  `commentId` bigint unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `comment_like_tbl_user_tbl_createId` (`createId`),
+  KEY `comment_like_tbl_commentTbl_IDX` (`commentTbl`,`createId`,`commentId`) USING BTREE,
+  CONSTRAINT `comment_like_tbl_user_tbl_createId` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- 6. board_file_tbl
 -- myweb_db.board_file_tbl definition
-
 CREATE TABLE `board_file_tbl` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tbl` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `boardId` bigint unsigned NOT NULL DEFAULT '0',
   `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ord` int unsigned NOT NULL DEFAULT '1',
   `fileType` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `uniqName` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `length` int unsigned NOT NULL DEFAULT '0',
-  `deleteYn` tinyint(1) NOT NULL DEFAULT '0',
+  `description` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tbl` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `boardId` bigint unsigned NOT NULL DEFAULT '0',
+  `deleteFlag` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `board_file_tbl_id_IDX` (`id`,`deleteYn`) USING BTREE,
-  KEY `board_file_tbl_boardId_IDX` (`tbl`,`boardId`) USING BTREE,
-  KEY `board_file_tbl_boardId_deleteYn_IDX` (`tbl`,`boardId`,`deleteYn`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `board_file_tbl_id_IDX` (`id`,`deleteFlag`) USING BTREE,
+  KEY `board_file_tbl_tbl_boardId_IDX` (`tbl`,`boardId`) USING BTREE,
+  KEY `board_file_tbl_tbl_boardId_deleteFlag_IDX` (`tbl`,`boardId`,`deleteFlag`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 
--- 6. comment_like_tbl
--- myweb_db.comment_like_tbl definition
+-- 채팅방 DDL
 
-CREATE TABLE `comment_like_tbl` (
+CREATE TABLE `stompevery_room` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `commentId` bigint unsigned NOT NULL,
-  `createId` bigint NOT NULL,
+  `roomName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `deleteFlag` tinyint(1) DEFAULT '0',
+  `count` int DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `stompevery_chat` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `roomId` bigint unsigned NOT NULL,
+  `writer` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `msgTime` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` varchar(1000) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `comment_like_tbl_boardId_IDX` (`commentId`) USING BTREE,
-  KEY `comment_like_tbl_createId_IDX` (`createId`) USING BTREE,
-  CONSTRAINT `comment_like_tbl_board_comment_tbl_FK` FOREIGN KEY (`commentId`) REFERENCES `board_comment_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `comment_like_tbl_user_tbl_FK` FOREIGN KEY (`createId`) REFERENCES `user_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `stompevery_chat_FK_roomId` (`roomId`),
+  CONSTRAINT `stompevery_chat_FK_roomId` FOREIGN KEY (`roomId`) REFERENCES `stompevery_room` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `stomplogin_room` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `roomName` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `deleteFlag` tinyint(1) DEFAULT '0',
+  `count` int DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `stomplogin_chat` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `roomId` bigint unsigned NOT NULL,
+  `writerId` bigint unsigned NOT NULL,
+  `msgTime` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` varchar(1000) COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stompevery_chat_FK_roomId` (`roomId`),
+  CONSTRAINT `stomplogin_chat_FK_roomId` FOREIGN KEY (`roomId`) REFERENCES `stomplogin_room` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `stomplogin_chat_FK_writerId` FOREIGN KEY (`writerId`) REFERENCES `member_tbl` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 ```
 
