@@ -30,7 +30,7 @@ public interface IBoardComment extends IBase{
         if(from.getLikeQty() != null){
             this.setLikeQty(from.getLikeQty());
         }
-        if(getBoardId() != null){
+        if(from.getBoardId() != null){
             this.setBoardId(from.getBoardId());
         }
         IBase.super.copyFields(from);

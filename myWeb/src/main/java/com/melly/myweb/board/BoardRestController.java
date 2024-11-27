@@ -173,6 +173,11 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     }
 
     @Override
+    public ResponseEntity<ResponseDto> updateDeleteFlag(Model model, Long id, BoardDto dto) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<ResponseDto> deleteById(Model model, Long id) {
         return null;
     }

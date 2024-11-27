@@ -167,6 +167,11 @@ public class LoginRestController implements ICommonRestController{
     }
 
     @Override
+    public ResponseEntity<ResponseDto> updateDeleteFlag(Model model, Long id, Object dto) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<ResponseDto> deleteById(Model model, Long id) {
         return null;
     }

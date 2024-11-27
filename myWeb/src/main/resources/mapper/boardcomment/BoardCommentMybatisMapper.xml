@@ -9,7 +9,7 @@
             , createId
             , createDt
             , deleteFlag)
-        VALUES ( #{comment})
+        VALUES ( #{comment}
         , #{boardId}
         , 0
         , #{createId}

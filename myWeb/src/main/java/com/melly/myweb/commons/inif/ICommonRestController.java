@@ -11,6 +11,7 @@ public interface ICommonRestController<Req> extends IResponseController {
 
     ResponseEntity<ResponseDto> insert(Model model, @RequestBody Req dto);
     ResponseEntity<ResponseDto> update(Model model, @PathVariable Long id, @RequestBody Req dto);
+    ResponseEntity<ResponseDto> updateDeleteFlag(Model model, @PathVariable Long id, @RequestBody Req dto);
     ResponseEntity<ResponseDto> deleteById(Model model, @PathVariable Long id);
     ResponseEntity<ResponseDto> findById(Model model, @PathVariable Long id);
 

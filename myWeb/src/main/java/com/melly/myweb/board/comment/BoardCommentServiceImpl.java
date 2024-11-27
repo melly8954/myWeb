@@ -1,49 +1,50 @@
 package com.melly.myweb.board.comment;
 
-import com.melly.myweb.board.commentlike.CommentLikeDto;
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.SearchQueryDto;
 import com.melly.myweb.commons.exception.IdNotFoundException;
 import com.melly.myweb.user.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class BoardCommentServiceImpl implements IBoardCommentService{
     @Autowired
     private IBoardCommentMybatisMapper boardCommentMybatisMapper;
 
     @Override
-    public BoardCommentDto insert(CUDInfoDto cudInfoDto, BoardCommentDto dto) {
-        if( cudInfoDto == null || dto == null ){
+    public BoardCommentDto insert(CUDInfoDto cudInfoDto, BoardCommentDto boardCommentDto) {
+        if( cudInfoDto == null || boardCommentDto == null ){
             return null;
         }
         BoardCommentDto insert = BoardCommentDto.builder().build();
-        insert.copyFields(dto);
+        insert.copyFields(boardCommentDto);
         cudInfoDto.setCreateInfo(insert);
         this.boardCommentMybatisMapper.insert(insert);
         return insert;
     }
 
     @Override
-    public BoardCommentDto update(CUDInfoDto cudInfoDto, BoardCommentDto dto) {
-        if( cudInfoDto == null || dto == null){
+    public BoardCommentDto update(CUDInfoDto cudInfoDto, BoardCommentDto boardCommentDto) {
+        if( cudInfoDto == null || boardCommentDto == null){
             return null;
         }
         BoardCommentDto update = BoardCommentDto.builder().build();
-        update.copyFields(dto);
+        update.copyFields(boardCommentDto);
         cudInfoDto.setUpdateInfo(update);
         this.boardCommentMybatisMapper.update(update);
         return update;
     }
 
     @Override
-    public Boolean updateDeleteFlag(CUDInfoDto cudInfoDto, BoardCommentDto dto) {
-        if( cudInfoDto == null || dto == null ){
+    public Boolean updateDeleteFlag(CUDInfoDto cudInfoDto, BoardCommentDto boardCommentDto) {
+        if( cudInfoDto == null || boardCommentDto == null ){
             return null;
         }
         BoardCommentDto delete = BoardCommentDto.builder().build();
-        delete.copyFields(dto);
+        delete.copyFields(boardCommentDto);
         delete.setDeleteFlag(true);
         cudInfoDto.setDeleteInfo(delete);
         this.boardCommentMybatisMapper.updateDeleteFlag(delete);
