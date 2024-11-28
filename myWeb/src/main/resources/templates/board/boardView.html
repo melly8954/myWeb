@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>게시글 상세내용</title>
     <link rel="stylesheet" href="/css/boardView.css">
+    <link rel="stylesheet" href="/css/boardComment.css">
 </head>
 <body>
     <ul id="board_view">
@@ -35,7 +36,10 @@
         <label for="comment"></label> <input type="text" id="comment" name="comment" maxlength="100"/>
         <button id="insertComment" onclick="$.insertComment();">댓글추가</button>
     </fieldset>
-    <div id="commentList"></div>
+
+    <fieldset id="commentListField">
+        <div id="commentList"></div>
+    </fieldset>
 
 
 <script src="/js/jquery-3.7.1.min.js"></script>
@@ -184,13 +188,13 @@
             let createDt = commentItem.createDt;
             let createName = commentItem.createName;
 
-            html += `<div id=commentList_${id}>`;
-            html += `<div> ${comment}</div>`
-            html += `<div>${createDt}</div>`;
-            html += `<div>${createName}</div>`;
+            html += `<div id=commentList_${id} class="commentList">`;
+            html += `<div>댓글 내용 :  ${comment}</div>`
+            html += `<div>작성자 : ${createName}</div>`;
+            html += `<div>작성일 : ${createDt}</div>`;
 
-            html += `<div onclick=$.deleteComment(${id})> Ｘ </div>`;
-            html += `<div id=likeListQty_${id}>${likeQty}</div>`;
+            html += `<div class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</div>`;
+            html += `<div id=likeListQty_${id}>좋아요 수 : ${likeQty}</div>`;
             html += `</div>`;
         }
         $("#commentList").append(html);
