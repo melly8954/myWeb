@@ -49,7 +49,7 @@ public class BoardCommentRestController implements ICommonRestController<BoardCo
     }
 
     @Override
-    @PatchMapping("/update")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<ResponseDto> update(Model model, @Validated @PathVariable Long id, BoardCommentDto boardCommentDto) {
         try{
             if(boardCommentService== null){

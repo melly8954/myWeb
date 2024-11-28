@@ -41,6 +41,26 @@
         <div id="commentList"></div>
     </fieldset>
 
+    <div id="modal_box_view" style="display: none">
+        <h2>Modify Comment</h2>
+        <fieldset>
+            <div class="row">
+                <h2>본문</h2>
+                <div>
+                    <label for="commentListContent"></label>
+                    <textarea id="commentListContent" name="commentListContent"></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row">
+            <div>
+                <button id="updateButton">수정</button>
+            </div>
+            <div>
+                <button class="modalCloseButton">Close</button>
+            </div>
+        </div>
+    </div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 </body>
@@ -183,7 +203,7 @@
         for (const commentItem of commentList) {
             let id = commentItem.id;
             let comment = commentItem.comment;
-            let commentId = commentItem.commentId;
+            let boardId = commentItem.boardId;
             let likeQty = commentItem.likeQty;
             let createDt = commentItem.createDt;
             let createName = commentItem.createName;
@@ -193,12 +213,55 @@
             html += `<div>작성자 : ${createName}</div>`;
             html += `<div>작성일 : ${createDt}</div>`;
 
-            html += `<div class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</div>`;
-            html += `<div id=likeListQty_${id}>좋아요 수 : ${likeQty}</div>`;
+            html += `<div onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>`;
+            html += `<div id=likeListQty_${boardId}>좋아요 수 : ${likeQty}</div>`;
             html += `</div>`;
         }
         $("#commentList").append(html);
     }
+    $.updateComment = function (id){
+        if (id <= 0) {
+            return;
+        }
+        let commentListContent = $("#commentListContent").val().trim().replace(/\n/g, "<br>");
+        let boardId = {{boardView.id}};
+        if (!commentListContent || commentListContent === "") {
+            alert("댓글 내용을 입력하세요.");
+            return;
+        }
+        $.ajax({
+            url: "/api/board_comment/update/" + id,
+            type: "PATCH",
+            datatype: "json",
+            data: JSON.stringify({"id": id, "comment": commentListContent, "boardId": boardId}),
+            contentType: "application/json; charset=UTF-8",
+        }).done(function (data) {
+            console.log("done:data=", data);
+
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("fail:jqXHR=", jqXHR, ", status=", status, ", errorThrown=", errorThrown);
+            alert("댓글 수정 실패 했습니다. " + jqXHR.responseJSON.message);
+        });
+    }
+
+    $.showViewModalButton = function (commentId){
+        // id="modal_box_view" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
+        $('#modal_box_view').fadeIn(1000);
+        $('.modal_bg').fadeIn(1000);
+        $("#updateButton").click(function () {
+            $.updateComment(commentId);
+        });
+    };
+
+    $('.modalCloseButton').click(function () {
+        // id="modal_box_add", id="modal_box_view" 요소와 class="modal_bg" 요소를 서서히 감춘다.
+        $('#modal_box_view').fadeOut();
+        $('.modal_bg').fadeOut();
+
+        let id = {{boardView.id}};
+        $.getBoardCommentList(id);
+    });
+
     $.deleteComment = function (id){
         if (id <= 0) {
             return;
@@ -226,5 +289,6 @@
     $.deleteCommentList = function (id){
         $("#commentList_"+id).remove();
     }
+
 </script>
 </html>

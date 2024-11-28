@@ -15,3 +15,19 @@
     cursor: pointer; /* 마우스 오버 시 포인터 모양 */
     transition: background-color 0.3s ease; /* 배경색 변화에 애니메이션 추가 */
 }
+#modal_box_view {
+    /* 모달 화면 안의 스타일, z-index: 값이 가장 크므로 화면의 상위에 표현된다.*/
+    width: 70%;
+    height: 850px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: azure;
+    display: flex;
+    flex-flow: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}

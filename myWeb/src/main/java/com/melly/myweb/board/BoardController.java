@@ -1,6 +1,8 @@
 package com.melly.myweb.board;
 
 
+import com.melly.myweb.board.comment.BoardCommentDto;
+import com.melly.myweb.board.comment.IBoardCommentService;
 import com.melly.myweb.board.like.BoardLikeDto;
 import com.melly.myweb.board.like.IBoardLikeService;
 import com.melly.myweb.commons.dto.CUDInfoDto;
