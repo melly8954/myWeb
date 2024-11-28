@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class BoardCommentDto extends BaseDto implements IBoardComment {
     private Long id;
 
-    @Size(min = 4, max = 1000, message = "댓글은 10~1000자 입니다.")
+    @Size(min = 1, max = 1000, message = "댓글은 1~1000자 입니다.")
     private String comment;
 
     private Integer likeQty;
