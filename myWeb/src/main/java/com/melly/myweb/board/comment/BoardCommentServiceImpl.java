@@ -78,7 +78,7 @@ public class BoardCommentServiceImpl implements IBoardCommentService{
             return List.of();
         }
         searchBoardCommentDto.settingValues();
-        searchBoardCommentDto.setCommnetTbl(new BoardCommentDto().getTbl());
+        searchBoardCommentDto.setCommentTbl(new BoardCommentDto().getTbl());
         searchBoardCommentDto.setCreateId(loginUser.getId());
 
         List<BoardCommentDto> list = this.boardCommentMybatisMapper.findAllByBoardId(searchBoardCommentDto);
