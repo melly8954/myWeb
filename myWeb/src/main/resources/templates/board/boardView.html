@@ -54,7 +54,7 @@
         </fieldset>
         <div class="row">
             <div>
-                <button id="updateButton">수정</button>
+                <button id="updateMBtn">수정</button>
             </div>
             <div>
                 <button class="modalCloseButton">Close</button>
@@ -213,7 +213,7 @@
             html += `<div>작성자 : ${createName}</div>`;
             html += `<div>작성일 : ${createDt}</div>`;
 
-            html += `<div onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>`;
+            html += `<div class="updateBtn" onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>`;
             html += `<div id=likeListQty_${boardId}>좋아요 수 : ${likeQty}</div>`;
             html += `</div>`;
         }
@@ -223,10 +223,13 @@
         if (id <= 0) {
             return;
         }
-        let commentListContent = $("#commentListContent").val().trim().replace(/\n/g, "<br>");
+        let commentListContent = $("#commentListContent").val();
         let boardId = {{boardView.id}};
         if (!commentListContent || commentListContent === "") {
             alert("댓글 내용을 입력하세요.");
+            return;
+        }
+        if (!confirm("댓글을 수정 하시겠습니까 ?")) {
             return;
         }
         $.ajax({
@@ -237,6 +240,7 @@
             contentType: "application/json; charset=UTF-8",
         }).done(function (data) {
             console.log("done:data=", data);
+            $.getBoardCommentList(data.responseData.boardId);
 
         }).fail(function (jqXHR, status, errorThrown) {
             console.log("fail:jqXHR=", jqXHR, ", status=", status, ", errorThrown=", errorThrown);
@@ -248,7 +252,7 @@
         // id="modal_box_view" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
         $('#modal_box_view').fadeIn(1000);
         $('.modal_bg').fadeIn(1000);
-        $("#updateButton").click(function () {
+        $("#updateMBtn").off("click").click(function () {
             $.updateComment(commentId);
         });
     };
@@ -257,9 +261,6 @@
         // id="modal_box_add", id="modal_box_view" 요소와 class="modal_bg" 요소를 서서히 감춘다.
         $('#modal_box_view').fadeOut();
         $('.modal_bg').fadeOut();
-
-        let id = {{boardView.id}};
-        $.getBoardCommentList(id);
     });
 
     $.deleteComment = function (id){
