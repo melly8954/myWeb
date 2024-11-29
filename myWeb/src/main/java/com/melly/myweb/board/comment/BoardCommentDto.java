@@ -26,4 +26,5 @@ public class BoardCommentDto extends BaseDto implements IBoardComment {
     public String getTbl(){
         return "boardcomment";
     }
+    private Boolean commentLikeRecoder;
 }

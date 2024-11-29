@@ -17,6 +17,9 @@ public interface IBoardComment extends IBase{
 
     String getTbl();
 
+    Boolean getCommentLikeRecoder();
+    void setCommentLikeRecoder(Boolean commentLikeRecoder);
+
     default void copyFields(IBoardComment from){
         if(from == null){
             return;
@@ -32,6 +35,9 @@ public interface IBoardComment extends IBase{
         }
         if(from.getBoardId() != null){
             this.setBoardId(from.getBoardId());
+        }
+        if(from.getCommentLikeRecoder() != null){
+            this.setCommentLikeRecoder(from.getCommentLikeRecoder());
         }
         IBase.super.copyFields(from);
     }

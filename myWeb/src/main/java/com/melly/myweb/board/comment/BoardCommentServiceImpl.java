@@ -1,11 +1,14 @@
 package com.melly.myweb.board.comment;
 
+import com.melly.myweb.board.commentlike.CommentLikeDto;
+import com.melly.myweb.board.commentlike.ICommentLikeMybatisMapper;
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.SearchQueryDto;
 import com.melly.myweb.commons.exception.IdNotFoundException;
 import com.melly.myweb.user.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +16,9 @@ import java.util.List;
 public class BoardCommentServiceImpl implements IBoardCommentService{
     @Autowired
     private IBoardCommentMybatisMapper boardCommentMybatisMapper;
+
+    @Autowired
+    private ICommentLikeMybatisMapper commentLikeMybatisMapper;
 
     @Override
     public BoardCommentDto insert(CUDInfoDto cudInfoDto, BoardCommentDto boardCommentDto) {
@@ -96,16 +102,41 @@ public class BoardCommentServiceImpl implements IBoardCommentService{
     }
 
     @Override
+    @Transactional
     public void addLikeQty(CUDInfoDto cudInfoDto, Long id) {
         if( cudInfoDto == null || cudInfoDto.getLoginUser() == null || id == null || id <= 0 ){
             return;
         }
+        CommentLikeDto commentLikeDto = CommentLikeDto.builder()
+                .commentId(id)
+                .createId(cudInfoDto.getLoginUser().getId())
+                .commentTbl(new BoardCommentDto().getTbl()).build();
 
+        Integer count = this.commentLikeMybatisMapper.countByCommentLike(commentLikeDto);
+        if( count > 0 ){
+            return;
+        }
+        this.commentLikeMybatisMapper.insert(commentLikeDto);
+        this.boardCommentMybatisMapper.addLikeQty(id);
     }
 
     @Override
+    @Transactional
     public void subLikeQty(CUDInfoDto cudInfoDto, Long id) {
+        if( cudInfoDto== null || cudInfoDto.getLoginUser() == null || id == null || id <= 0 ){
+            return;
+        }
+        CommentLikeDto commentLikeDto = CommentLikeDto.builder()
+                .commentId(id)
+                .createId(cudInfoDto.getLoginUser().getId())
+                .commentTbl(new BoardCommentDto().getTbl()).build();
 
+        Integer count = this.commentLikeMybatisMapper.countByCommentLike(commentLikeDto);
+        if( count < 1 ){
+            return;
+        }
+        this.commentLikeMybatisMapper.deleteByCommentLike(commentLikeDto);
+        this.boardCommentMybatisMapper.subLikeQty(id);
     }
 
 }
