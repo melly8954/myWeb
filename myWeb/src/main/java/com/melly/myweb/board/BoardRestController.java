@@ -2,6 +2,7 @@ package com.melly.myweb.board;
 
 import com.melly.myweb.board.like.BoardLikeDto;
 import com.melly.myweb.board.like.IBoardLikeMybatisMapper;
+import com.melly.myweb.board.like.IBoardLikeService;
 import com.melly.myweb.commons.dto.CUDInfoDto;
 import com.melly.myweb.commons.dto.ResponseCode;
 import com.melly.myweb.commons.dto.ResponseDto;
@@ -29,7 +30,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     private IBoardService boardService;
 
     @Autowired
-    private IBoardLikeMybatisMapper boardLikeMybatisMapper;
+    private IBoardLikeService boardLikeService;
 
     @Override
     @PostMapping("boardInsert")
@@ -163,7 +164,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
                 .boardId(id)
                 .build();
 
-        Integer likeCount = this.boardLikeMybatisMapper.countByLike(boardLikeDto);
+        Integer likeCount = this.boardLikeService.countByLike(boardLikeDto);
         result.setLikeRecord(likeCount == 1);       // 1일 경우 true -> 좋아요를 누른 경우
         return result;
     }

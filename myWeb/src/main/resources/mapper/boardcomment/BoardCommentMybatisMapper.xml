@@ -58,22 +58,23 @@
 
     <select id="findAllByBoardId" parameterType="SearchBoardCommentDto" resultType="BoardCommentDto">
         SELECT bc.id
-        , bc.comment
-        , bc.boardId
-        , bc.likeQty
-        , bc.createId
-        , bc.createDt
-        , ct.nickname AS createName
-        , bc.updateId
-        , bc.updateDt
-        , ut.nickname AS updateName
-        , bc.deleteId
-        , bc.deleteDt
-        , dt.nickname AS deleteName
-        , bc.deleteFlag
-        From board_comment_tbl AS bc
+             , bc.comment
+             , bc.likeQty
+             , bc.boardId
+             , bc.createDt
+             , bc.createId
+             , ct.nickname AS createName
+             , bc.updateDt
+             , bc.updateId
+             , ut.nickname AS updateName
+             , bc.deleteDt
+             , bc.deleteId
+             , dt.nickname AS deleteName
+             , bc.deleteFlag
+             , cl.commentId
+        FROM board_comment_tbl AS bc
                  LEFT JOIN comment_like_tbl AS cl
-                    ON cl.commentTbl = #{commentTbl} AND cl.createId = #{createId} AND bc.id = cl.commentId
+                           ON cl.commentTbl = #{commentTbl} AND cl.createId = #{createId} AND bc.id = cl.commentId
                  LEFT OUTER JOIN user_tbl AS ct ON bc.createId = ct.id
                  LEFT OUTER JOIN user_tbl AS ut ON bc.updateId = ut.id
                  LEFT OUTER JOIN user_tbl AS dt ON bc.deleteId = dt.id

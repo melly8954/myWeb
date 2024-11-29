@@ -201,7 +201,6 @@ public class BoardCommentRestController implements ICommonRestController<BoardCo
                 .commentId(id)
                 .createId(loginUser.getId())
                 .commentTbl(new BoardCommentDto().getTbl()).build();
-
         Integer likeCount = this.commentLikeService.countCommentLike(commentLikeDto);
         result.setCommentLikeRecoder(likeCount == 1);    // 1일 경우 true -> 좋아요를 누른 경우
         return result;
