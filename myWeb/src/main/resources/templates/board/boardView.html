@@ -217,11 +217,12 @@
 
             html += `<div class="updateBtn" onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>`;
             if ( commentId === undefined || commentId === null ) {
-                html += `<div><img id='commentLikeIcon_${id}' src='/svg/heartOff.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})></div>`;
+                html += `<div>추천 누르기 <img id='commentLikeIcon_${id}' src='/svg/heartOff.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})>
+                            <span id=likeListQty_${id}>추천 수 : ${likeQty}</span> </div>`;
             } else {
-                html += `<div><img id='commentLikeIcon_${id}' src='/svg/heartOn.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})></div>`;
+                html += `<div>추천 누르기 <img id='commentLikeIcon_${id}' src='/svg/heartOn.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})>
+                            <span id=likeListQty_${id}>추천 수 : ${likeQty}</span></div>`;
             }
-            html += `<div id=likeListQty_${id}>좋아요 수 : ${likeQty}</div>`;
             html += `</div>`;
         }
         $("#commentList").append(html);
@@ -321,7 +322,7 @@
             console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
             if (status === "success") {
                 //좋아요 개수 업데이트
-                $(`#likeListQty_${id}`).text(`좋아요 수 : ${data.responseData.likeQty}`);
+                $(`#likeListQty_${id}`).text(`추천 수 : ${data.responseData.likeQty}`);
 
                 // 좋아요 상태에 따른 아이콘 업데이트
                 if (data.responseData.commentLikeRecoder === false) {
