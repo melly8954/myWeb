@@ -28,4 +28,6 @@ public class BoardDto extends BaseDto implements IBoard {
         return "board";
     }
     private Boolean likeRecord;
+
+    private String totalComment;   //댓글 개수
 }

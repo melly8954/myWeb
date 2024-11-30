@@ -145,9 +145,10 @@
             let createName = boardList[i].createName;
             let createDt = boardList[i].createDt;
             let updateDt = boardList[i].updateDt;
+            let totalComment = boardList[i].totalComment;
             let strLi = `<a href="board_view?id=${id}">
                          <li><div><span>id : ${id}</span>
-                                  <span>title : ${title}</span>
+                                  <span>title : ${title} ${totalComment}</span>
                                   <span>content : ${content}</span>
                                   <span>viewQty : ${viewQty}</span>
                                   <span>likeQty : ${likeQty}</span>

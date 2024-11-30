@@ -23,6 +23,9 @@ public interface IBoard extends IBase {
     Boolean getLikeRecord();
     void setLikeRecord(Boolean likeRecord);
 
+    String getTotalComment();
+    void setTotalComment(String totalComment);
+
     default void copyFields(IBoard from) {
         if (from == null) {
             return;
@@ -44,6 +47,9 @@ public interface IBoard extends IBase {
         }
         if (from.getLikeRecord() != null){
             this.setLikeRecord(from.getLikeRecord());
+        }
+        if (from.getTotalComment() != null){
+            this.setTotalComment(from.getTotalComment());
         }
         IBase.super.copyFields(from);
     }

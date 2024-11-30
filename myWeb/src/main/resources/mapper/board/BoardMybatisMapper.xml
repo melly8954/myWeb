@@ -103,6 +103,9 @@
     <select id="findAllByNameContains" parameterType="SearchQueryDto" resultType="BoardDto">
         SELECT bt.id
              , bt.title
+             , (SELECT count(*)
+                from board_comment_tbl
+                WHERE boardId = bt.id AND deleteFlag=false) AS totalComment
              , bt.content
              , bt.viewQty
              , bt.likeQty

@@ -90,7 +90,15 @@ public class BoardServiceImpl implements IBoardService {
         }
         searchQueryDto.settingValues();
         List<BoardDto> list = this.boardMybatisMapper.findAllByNameContains(searchQueryDto);
-        return list;
+        List<BoardDto> result = list.stream()
+                .peek(x -> {
+                    String totalComment = x.getTotalComment();
+                    x.setTotalComment(totalComment == null || totalComment.equals("0")
+                            ? "[0]"
+                            : "[" + totalComment + "]");
+                })
+                .toList();
+        return result;
     }
 
     @Override
