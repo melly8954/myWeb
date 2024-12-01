@@ -1,0 +1,160 @@
+/* 기본 스타일 초기화 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+}
+
+/* 헤더 스타일 */
+div h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+
+div p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* 검색창 스타일 */
+div label[for="searchTitle"] {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #444;
+}
+
+input#searchTitle {
+    padding: 8px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 8px 12px;
+    margin-left: 5px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 게시판 제목 헤더 */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.list-header {
+    display: flex;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+.column {
+    flex: 1;
+    padding: 5px;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* 게시글 리스트 */
+#BoardList .board-item {
+    display: flex;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin: 5px 0;
+    background-color: #fff;
+}
+
+#BoardList .board-item .column {
+    flex: 1;
+    padding: 5px;
+}
+
+#BoardList .board-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 페이지네이션 */
+#pageDiv {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pageDiv a {
+    margin: 0 5px;
+    padding: 8px 12px;
+    background-color: #e9ecef;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6;
+}
+
+#pageDiv a:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#pageDiv a.active {
+    background-color: #0d6efd;
+    color: #fff;
+    font-weight: bold;
+    cursor: default;
+    border: 1px solid #0a58ca;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+#pageDiv a.active:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* 총 게시글 수 */
+#total_div {
+    margin: 20px 0;
+    padding-left: 10px;
+}
+
+#total {
+    font-weight: bold;
+    color: #333;
+    display: inline-block;
+}
+
+/* 홈 화면 이동 버튼 */
+button[onclick^="goBack"] {
+    margin: 20px auto;
+    display: block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #28a745;
+}
+
+button[onclick^="goBack"]:hover {
+    background-color: #218838;
+}
+
+/* 셀렉트 박스 스타일 */
+select#rowsOnePage {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}

@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/boardList.css">
     <title>게시판 목록</title>
 </head>
 <body>
@@ -16,37 +17,51 @@
         <label for="searchTitle">검색창</label>
         <input id="searchTitle" name="searchTitle" type="text" value="">
         <button onclick="$.searchBoardList(1)">검색</button>
+    </div><br>
+    <div>
+        <span>
+            <label for="rowsOnePage">게시글 보기</label>
+            <select id="rowsOnePage">
+                <option value="5">5개씩</option>
+                <option selected value="10">10개씩</option>
+                <option value="20">20개씩</option>
+                <option value="30">30개씩</option>
+            </select>
+        </span>
     </div>
     <div>
         <ul>
             <li>
-                <span>id
-                    <button onclick="$.idAsc();">△</button>
-                    <button onclick="$.idDesc();">▽</button>
-                </span>
-                <span> : </span>
-                <span>title
-                        <button onclick="$.titleAsc();">△</button>
-                        <button onclick="$.titleDesc();">▽</button>
-                </span>
-                <span> : </span>
-                <span>
-                    <label for="rowsOnePage">Row</label>
-                    <select id="rowsOnePage">
-                        <option value="5">5개씩</option>
-                        <option selected value="10">10개씩</option>
-                        <option value="20">20개씩</option>
-                        <option value="30">30개씩</option>
-                    </select>
-                </span>
+                <div class="list-header">
+                    <span class="column">글 번호
+                        <span>
+                            <button onclick="$.idAsc();">△</button>
+                            <button onclick="$.idDesc();">▽</button>
+                        </span>
+                    </span>
+                    <span class="column"> 제목
+                        <span>
+                            <button onclick="$.titleAsc();">△</button>
+                            <button onclick="$.titleDesc();">▽</button>
+                        </span>
+                    </span>
+                    <span class="column"> 작성자 </span>
+                    <span class="column"> 작성일 </span>
+                    <span class="column"> 조회수 </span>
+                    <span class="column"> 추천수 </span>
+                    <span class="column"> 최근 수정일 </span>
+                </div>
+            </li>
+            <li id="BoardList">
             </li>
         </ul>
-        <ul id="BoardList"></ul>
-        <div>total : <span id="total"></span></div>
-        <button onclick="location.href='/board/board_insert_page'">게시글 등록</button><a href="/board/board_insert_page">게시글 등록</a>
+    </div>
+
+        <div id="total_div">total : <span id="total"></span></div>
+        <button onclick="location.href='/board/board_insert_page'">게시글 등록</button>
         <div id="pageDiv">
         </div>
-    </div>
+
     <button onclick="goBack();">홈 화면 이동</button>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
@@ -135,30 +150,30 @@
 
     $.showBoardList = function (boardList) {
         const list = $("#BoardList");
-        list.children().remove();
+        list.empty(); // 기존 리스트 삭제
         for (let i = 0; i < boardList.length; i++) {
             let id = boardList[i].id;
             let title = boardList[i].title;
-            let content = boardList[i].content;
             let viewQty = boardList[i].viewQty;
             let likeQty = boardList[i].likeQty;
             let createName = boardList[i].createName;
             let createDt = boardList[i].createDt;
             let updateDt = boardList[i].updateDt;
             let totalComment = boardList[i].totalComment;
-            let strLi = `<a href="board_view?id=${id}">
-                         <li><div><span>id : ${id}</span>
-                                  <span>title : ${title} ${totalComment}</span>
-                                  <span>content : ${content}</span>
-                                  <span>viewQty : ${viewQty}</span>
-                                  <span>likeQty : ${likeQty}</span>
-                                  <span>createName : ${createName}</span>
-                                  <span>createDt : ${createDt}</span>
-                                  <span>updateDt : ${updateDt}</span></div></li></a>`;
-            list.append(strLi);
+            let row = `<div class="board-item">
+                      <span class="column"><a href="board_view?id=${id}">${id}</a></span>
+                      <span class="column">${title} ${totalComment}</span>
+                      <span class="column">${createName}</span>
+                      <span class="column">${createDt}</span>
+                      <span class="column">${viewQty}</span>
+                      <span class="column">${likeQty}</span>
+                      <span class="column">${updateDt}</span>
+                  </div>`;
+            list.append(row);
         }
     }
 
+    // 정렬 관련(게시글id 정렬, 제목정렬)
     $.idAsc = function (){
         sortColumn = "id";
         sortAscDesc = "ASC";
@@ -181,8 +196,10 @@
         sortColumn = "title";
         sortAscDesc = "DESC";
         $.searchBoardList(page);
+
     }
 
+    // 페이지네이션
     $.makePageUI = function (paramTotal, paramPage) {
         // paramTotal : 전체 데이터 수
         // paramPage : 현재 페이지 번호
@@ -198,11 +215,13 @@
         $("#pageDiv").append(`<a onclick="$.searchBoardList(${prev});">Prev</a>`);
 
         for (let i = startPage; i <= endPage; i++) {
-            if (paramPage == i) {
-                // sClass = "btn btn-primary rounded-pill";
+            if (paramPage === i) {
+                // 현재 페이지에만 active 클래스 추가
+                $("#pageDiv").append(`<a class="active">${i}</a>`);
+            } else {
+                // 다른 페이지는 active 클래스 없이 추가
+                $("#pageDiv").append(`<a onclick="$.searchBoardList(${i});">${i}</a>`);
             }
-            $("#pageDiv").append(`<a onclick="$.searchBoardList(${i});">${i}</a>`);
-            // sClass = "btn btn-success rounded-pill";
         }
 
         $("#pageDiv").append(`<a onclick="$.searchBoardList(${next});">Next</a>`);
