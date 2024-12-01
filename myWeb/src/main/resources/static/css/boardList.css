@@ -158,3 +158,9 @@ select#rowsOnePage {
     border: 1px solid #ccc;
     font-size: 0.9rem;
 }
+
+/* 제목 옆의 댓글 숫자[] */
+.red-bracket {
+    color: red;
+    font-weight: bold;
+}

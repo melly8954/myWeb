@@ -158,11 +158,11 @@
             let likeQty = boardList[i].likeQty;
             let createName = boardList[i].createName;
             let createDt = boardList[i].createDt;
-            let updateDt = boardList[i].updateDt;
+            let updateDt = boardList[i].updateDt == null ? "수정되지 않음" : boardList[i].updateDt; // 조건에 따라 updateDt 값 설정
             let totalComment = boardList[i].totalComment;
             let row = `<div class="board-item">
                       <span class="column"><a href="board_view?id=${id}">${id}</a></span>
-                      <span class="column">${title} ${totalComment}</span>
+                      <span class="column">${title} <span class="red-bracket">${totalComment}</span></span>
                       <span class="column">${createName}</span>
                       <span class="column">${createDt}</span>
                       <span class="column">${viewQty}</span>
