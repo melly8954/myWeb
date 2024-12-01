@@ -1,7 +1,7 @@
 /* 기본 스타일 초기화 */
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px;
     font-family: Arial, sans-serif;
     line-height: 1.6;
     background-color: #f9f9f9;
@@ -87,9 +87,32 @@ ul {
     color: inherit;
 }
 
+
+/* 총 게시글 수 */
+#total_div {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-right: 10px;
+    text-align: right; /* 내용물 오른쪽 정렬 */
+}
+
+#total {
+    font-weight: bold;
+    color: #333;
+    display: inline-block;
+}
+
+
+/* 게시글 등록 버튼 */
+button[onclick^="location.href='/board/board_insert_page'"] {
+    float: right; /* 버튼을 오른쪽으로 띄움 */
+    margin-right: 10px; /* 오른쪽 여백 */
+}
+
+
 /* 페이지네이션 */
 #pageDiv {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,17 +149,6 @@ ul {
     color: #fff;
 }
 
-/* 총 게시글 수 */
-#total_div {
-    margin: 20px 0;
-    padding-left: 10px;
-}
-
-#total {
-    font-weight: bold;
-    color: #333;
-    display: inline-block;
-}
 
 /* 홈 화면 이동 버튼 */
 button[onclick^="goBack"] {
