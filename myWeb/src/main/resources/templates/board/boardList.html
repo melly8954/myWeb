@@ -35,18 +35,23 @@
                 <div class="list-header">
                     <span class="column">글 번호
                         <span>
-                            <button onclick="$.idAsc();">△</button>
-                            <button onclick="$.idDesc();">▽</button>
+                            <button class="alignBtn" onclick="$.idAsc();">△</button>
+                            <button class="alignBtn" onclick="$.idDesc();">▽</button>
                         </span>
                     </span>
                     <span class="column"> 제목
                         <span>
-                            <button onclick="$.titleAsc();">△</button>
-                            <button onclick="$.titleDesc();">▽</button>
+                            <button class="alignBtn" onclick="$.titleAsc();">△</button>
+                            <button class="alignBtn" onclick="$.titleDesc();">▽</button>
                         </span>
                     </span>
                     <span class="column"> 작성자 </span>
-                    <span class="column"> 작성일 </span>
+                    <span class="column"> 작성일
+                        <span>
+                            <button class="alignBtn" onclick="$.createDtAsc();">△</button>
+                            <button class="alignBtn" onclick="$.createDtDesc();">▽</button>
+                        </span>
+                    </span>
                     <span class="column"> 조회수 </span>
                     <span class="column"> 추천수 </span>
                     <span class="column"> 최근 수정일 </span>
@@ -181,7 +186,7 @@
             let totalComment = boardList[i].totalComment;
             let row = `<div class="board-item">
                       <span class="column"><a href="board_view?id=${id}">${id}</a></span>
-                      <span class="column">${title} <span class="red-bracket">${totalComment}</span></span>
+                      <span class="column"><a href="board_view?id=${id}">${title}</a> <span class="red-bracket">${totalComment}</span></span>
                       <span class="column">${createName}</span>
                       <span class="column">${createDt}</span>
                       <span class="column">${viewQty}</span>
@@ -192,31 +197,70 @@
         }
     }
 
+    // 정렬 버튼 활성화 처리
+    function activateSortButton(button) {
+        // 모든 정렬 버튼에서 'active' 클래스 제거
+        $(".alignBtn").removeClass("active");
+
+        // 클릭된 버튼에만 'active' 클래스 추가
+        $(button).addClass("active");
+    }
+
     // 정렬 관련(게시글id 정렬, 제목정렬)
-    $.idAsc = function (){
+    $.idAsc = function () {
         sortColumn = "id";
         sortAscDesc = "ASC";
         $.searchBoardList(page);
-    }
 
-    $.idDesc = function (){
+        // 'idAsc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
+    $.idDesc = function () {
         sortColumn = "id";
         sortAscDesc = "DESC";
         $.searchBoardList(page);
-    }
 
-    $.titleAsc = function (){
+        // 'idDesc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
+    $.titleAsc = function () {
         sortColumn = "title";
         sortAscDesc = "ASC";
         $.searchBoardList(page);
-    }
 
-    $.titleDesc = function (){
+        // 'titleAsc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
+    $.titleDesc = function () {
         sortColumn = "title";
         sortAscDesc = "DESC";
         $.searchBoardList(page);
 
-    }
+        // 'titleDesc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
+    $.createDtAsc = function () {
+        sortColumn = "createDt";
+        sortAscDesc = "ASC";
+        $.searchBoardList(page);
+
+        // 'createDtAsc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
+    $.createDtDesc = function () {
+        sortColumn = "createDt";
+        sortAscDesc = "DESC";
+        $.searchBoardList(page);
+
+        // 'createDtDesc' 버튼 활성화
+        activateSortButton(event.target);
+    };
+
 
     // 페이지네이션
     $.makePageUI = function (paramTotal, paramPage) {
