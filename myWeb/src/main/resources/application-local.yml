@@ -14,3 +14,11 @@ spring:
     url: jdbc:log4jdbc:mysql://localhost:3306/myWeb_db?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: psw_web
     password: web123123!
+
+
+  # attach file
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      location: C:\psw\files   # 자기 PC에 첨부파일 저장할때

@@ -31,3 +31,5 @@ mybatis:
     type-aliases-package: com.melly.myweb
     configuration:
         map-underscore-to-camel-case: true
+
+
