@@ -104,7 +104,7 @@ ul {
 
 
 /* 게시글 등록 버튼 */
-button[onclick^="location.href='/board/board_insert_page'"] {
+#showInsertModalButton {
     float: right; /* 버튼을 오른쪽으로 띄움 */
     margin-right: 10px; /* 오른쪽 여백 */
 }
@@ -175,4 +175,55 @@ select#rowsOnePage {
 .red-bracket {
     color: red;
     font-weight: bold;
+}
+
+#modal_box_insert {
+    /* 모달 화면 안의 스타일, z-index: 값이 가장 크므로 화면의 상위에 표현된다.*/
+    width: 70%;
+    height: 70%;
+    margin: 0 auto;
+    padding: 50px;
+    text-align: center;
+    background-color: azure;
+    display: flex;
+    flex-flow: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
+#content {
+    width: 100%; /* 모달 너비에 맞춤 */
+    height: 150px !important;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
+}
+
+#modal_box_add button {
+    width: 100px;
+    height: 30px;
+    border: none;
+    margin-top: 10px;
+    align-self: center;
+    cursor: pointer;
+}
+
+.modal_bg {
+    /* 모달 화면이 나타나면 화면 안의 내용 div id="content" 를 어둡게 만든다.
+        z-index 값을 content 보다 크므로 마우스 클릭시 modal_bg 에 클릭이 된다.
+     */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
 }

@@ -57,11 +57,32 @@
         </ul>
     </div>
 
-        <div id="total_div">총 게시글 수 : <span id="total"></span></div>
-        <button onclick="location.href='/board/board_insert_page'">게시글 등록</button>
-        <div id="pageDiv"></div>
+    <div id="total_div">총 게시글 수 : <span id="total"></span></div>
+    <button id="showInsertModalButton">게시글 등록</button>
+    <div id="pageDiv"></div>
 
     <button onclick="goBack();">홈 화면 이동</button>
+
+    <div id="modal_box_insert" style="display: none">
+        <div><h2>게시글 추가하기</h2></div>
+        <fieldset>
+            <div>
+                <label for="title">제목</label> <input id="title" name="title" type="text" value=""/>
+            </div>
+            <div>
+                <label for="content">본문</label> <textarea id="content" name="content"></textarea>
+            </div>
+        </fieldset>
+        <div>
+            <div>
+                <button id="board_insert" onclick="$.board_insert();">추가</button>
+            </div>
+            <div>
+                <button class="modalCloseButton">Close</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal_bg" style="display: none"></div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 </body>
@@ -86,7 +107,6 @@
             rowsOnePage = Number($("#rowsOnePage").val());
             $.searchBoardList(1);
         })
-
     })
 
    // function getAllList(){
@@ -250,6 +270,50 @@
 
     const goBack = () => {
         location.href="/";
+    }
+
+    $('#showInsertModalButton').click(function () {
+        // id="modal_box_add" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
+        $('#modal_box_insert').fadeIn(1000);
+        $('.modal_bg').fadeIn();
+    });
+
+    $('.modalCloseButton').click(function () {
+        // id="modal_box_add", id="modal_box_view" 요소와 class="modal_bg" 요소를 서서히 감춘다.
+        $('#modal_box_insert').fadeOut();
+        $('.modal_bg').fadeOut();
+    });
+
+    $.board_insert = function (){
+        let title = $("#title").val();
+        let content = $("#content").val();
+
+        $.ajax({    // jQuery Ajax 비동기 서버와 통신
+            url: "/api/board/insert",  // 서버 주소
+            type: "POST",   // method 방식
+            datatype: "JSON",   // 전송하는 데이터 방식
+            data: JSON.stringify({
+                "title": title,
+                "content": content,
+            }),
+            // 전송하는 실제 데이터 JSON 을 사용했다.
+            contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
+        }).done(function (data, status, xhr) {
+            // ajax 의 요청이 완료되서 응답이 오면 실행한다.
+            // data : 실제 응답 데이터
+            // status : http 응답 성공 일 경우 "success"
+            // xhr : 부가 정보
+            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            $.searchBoardList(1);
+
+        }).fail(function (jqXHR, status, errorThrown) {
+            // ajax 의 요청이 실패하면 실행한다.
+            // jqXHR : 부가 정보
+            // status : http 응답, 4XX, 5XX
+            // errorThrown : error 를 던진 곳의 정보
+            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+            alert("검색을 실패했습니다. " + jqXHR.responseJSON.message);
+        });
     }
 </script>
 </html>

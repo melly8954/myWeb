@@ -33,7 +33,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     private IBoardLikeService boardLikeService;
 
     @Override
-    @PostMapping("boardInsert")
+    @PostMapping("insert")
     public ResponseEntity<ResponseDto> insert(Model model, @Validated @RequestBody BoardDto boardDto) {
         try{
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
