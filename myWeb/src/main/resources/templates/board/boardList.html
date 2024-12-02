@@ -320,6 +320,10 @@
         // id="modal_box_add" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
         $('#modal_box_insert').fadeIn(1000);
         $('.modal_bg').fadeIn();
+        // 모달창으로 스크롤 이동
+        $('html, body').animate({
+            scrollTop: $('#modal_box_insert').offset().top
+        }, 500); // 500ms 동안 부드럽게 스크롤
     });
 
     $('.modalCloseButton').click(function () {
