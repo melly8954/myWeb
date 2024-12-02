@@ -75,6 +75,12 @@
                 <label for="title">제목</label> <input id="title" name="title" type="text" value=""/>
             </div>
             <div>
+                <label for="file">첨부파일</label>
+                <input type="file" id="file" name="file" onchange="$.file_insert(this);" multiple />
+                <div id="fileListAdd" class="file-list"></div>
+            </div>
+            <div>
+                <br>
                 <label for="content">본문</label> <textarea id="content" name="content"></textarea>
             </div>
         </fieldset>
@@ -332,27 +338,57 @@
         $('.modal_bg').fadeOut();
     });
 
+
+
+    let fileArrayAdd = new Array();
+
+    $.file_insert = function(inputFile) {
+        let num = 0;
+        for ( const file of inputFile.files ) {
+            let html = "";
+            html += `<div id='file ${num} ' class='filebox'>`;
+            html += `<div class='filename'> ${file.name} </div>`;
+            html += "</div>";
+            $("#fileListAdd").append(html);
+            fileArrayAdd.push(file);
+            num++;
+        }
+        $("#file").val("");
+    }
+
     $.board_insert = function (){
         let title = $("#title").val();
         let content = $("#content").val();
+
+        let formData = new FormData();
+        for( const file of fileArrayAdd ){
+            formData.append("files",file);
+        }
+        formData.append("boardDto", new Blob([JSON.stringify({
+            "title": title, "content": content})],
+            {type:"application/json"}));
 
         $.ajax({    // jQuery Ajax 비동기 서버와 통신
             url: "/api/board/insert",  // 서버 주소
             type: "POST",   // method 방식
             datatype: "JSON",   // 전송하는 데이터 방식
-            data: JSON.stringify({
-                "title": title,
-                "content": content,
-            }),
+            data: formData,
             // 전송하는 실제 데이터 JSON 을 사용했다.
-            contentType: "application/json; charset=UTF-8", // 응답받는 데이터 형식
+            contentType: false,
+            processData: false,
         }).done(function (data, status, xhr) {
             // ajax 의 요청이 완료되서 응답이 오면 실행한다.
             // data : 실제 응답 데이터
             // status : http 응답 성공 일 경우 "success"
             // xhr : 부가 정보
             console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            // insert 완료시
+            $("#searchTitle").val("");
+            fileArrayAdd = new Array();
+            $("#fileListAdd").children().remove();
             $.searchBoardList(1);
+            $("#title").val("");
+            $("#content").val("");
 
         }).fail(function (jqXHR, status, errorThrown) {
             // ajax 의 요청이 실패하면 실행한다.

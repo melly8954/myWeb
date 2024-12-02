@@ -13,8 +13,8 @@ import java.nio.file.Paths;
 @Slf4j
 @Service
 public class FileCtrlService {
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadDir;
+//    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir = "/home/files";
 
     private void checkDirectory(String directory) throws IOException {
         // Path: 파일 시스템의 경로를 나타내는 객체

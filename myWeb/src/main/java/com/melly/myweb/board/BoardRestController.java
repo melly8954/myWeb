@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,9 +33,9 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     @Autowired
     private IBoardLikeService boardLikeService;
 
-    @Override
     @PostMapping("insert")
-    public ResponseEntity<ResponseDto> insert(Model model, @Validated @RequestBody BoardDto boardDto) {
+    public ResponseEntity<ResponseDto> insert(Model model, @Validated @RequestPart(value="boardDto") BoardDto boardDto,
+                                                            @RequestPart(value="files", required = false) List<MultipartFile> files) {
         try{
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
             BoardDto insert = this.boardService.insert(cudInfoDto,boardDto);
@@ -168,6 +169,16 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
         result.setLikeRecord(likeCount == 1);       // 1일 경우 true -> 좋아요를 누른 경우
         return result;
     }
+
+    
+    
+    
+    // 사용하지 않을 오버라이딩 메서드들
+    @Override
+    public ResponseEntity<ResponseDto> insert(Model model, BoardDto dto) {
+        return null;
+    }
+
     @Override
     public ResponseEntity<ResponseDto> update(Model model, Long id, BoardDto dto) {
         return null;
