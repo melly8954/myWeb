@@ -1,3 +1,21 @@
 .hidden{
     display: none;
 }
+
+#modal_box_board_update {
+    /* 모달 화면 안의 스타일, z-index: 값이 가장 크므로 화면의 상위에 표현된다.*/
+    width: 70%;
+    height: 850px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: azure;
+    display: flex;
+    flex-flow: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+

@@ -28,8 +28,34 @@
     </div>
     <button onclick="goBack();">뒤로</button>
     <div id="modifyDeleteBtns" class ="hidden">
-        <button onclick="boardUpdate();">수정</button>
+        <button onclick="$.showModalBoardUpdate();">수정</button>
         <button onclick="boardDelete();">삭제</button>
+    </div>
+
+
+    <div id="modal_box_board_update" style="display: none">
+        <fieldset>
+            <div class="row">
+                <h2>게시글 제목</h2>
+                <div>
+                    <label for="title">게시글 제목</label>
+                    <input type="text" id="title" name="title" placeholder="게시글 제목을 입력하세요.">
+                </div>
+                <h2>본문</h2>
+                <div>
+                    <label for="content"> 본문 </label>
+                    <textarea id="content" name="content"></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row">
+            <div>
+                <button id="board_update" onclick="$.board_update();">수정</button>
+            </div>
+            <div>
+                <button class="modalCloseButton">Close</button>
+            </div>
+        </div>
     </div>
 
     <fieldset>
@@ -42,7 +68,7 @@
     </fieldset>
 
     <div id="modal_box_view" style="display: none">
-        <h2>Modify Comment</h2>
+        <h2>댓글 수정 화면</h2>
         <fieldset>
             <div class="row">
                 <h2>본문</h2>
@@ -61,6 +87,7 @@
             </div>
         </div>
     </div>
+    <div class="modal_bg" style="display: none"></div>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 </body>
@@ -81,12 +108,16 @@
         history.back();
     }
 
-    function boardUpdate() {
-        let id = {{boardView.id}}
-        if (confirm(id+"번 게시글을 수정 하시겠습니까 ?")) {
-            window.location.href = "/board/board_update_page?id=" + id;
-        }
-    }
+    $.showModalBoardUpdate = function (commentId){
+        // id="modal_box_view" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
+        $('#modal_box_board_update').fadeIn(1000);
+        $('.modal_bg').fadeIn(1000);
+
+        // if (confirm(id+"번 게시글을 수정 하시겠습니까 ?")) {
+        //     window.location.href = "/board/board_update_page?id=" + id;
+        // }
+    };
+
     function boardDelete() {
         let id = {{boardView.id}}
         if (confirm(id+"번 게시글을 삭제 하시겠습니까 ?")) {
@@ -101,6 +132,38 @@
         if (createName === loggedInUser) {
             $("#modifyDeleteBtns").removeClass('hidden');
         }
+    }
+
+    // 게시글 업데이트
+    $.board_update = function (){
+        let id = {{boardView.id}};
+        let title = $("#title").val();
+        let content = $("#content").val();
+        if (!confirm(name + " 수정 하시겠습니까 ?")) {
+            return;
+        }
+
+        $.ajax({
+            url: "/api/board/update/"+id,
+            type: "PATCH",
+            datatype: "JSON",
+            data: JSON.stringify({
+                "id" : id,
+                "title": title,
+                "content": content
+            }),
+            contentType: "application/json; charset=UTF-8",
+        }).done(function (data, status, xhr) {
+            console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
+            $(".modalCloseButton").trigger("click");
+            window.location.href=`/board/board_view?id=${data.responseData.id}`;
+            // class="modalCloseButton" 요소를 클릭하는 이벤트를 발생한다.
+
+        }).fail(function (jqXHR, status, errorThrown) {
+            console.log("done:jqXHR=" + jqXHR + ", status=", status, ", errorThrown=", errorThrown);
+            alert("실패 했습니다. " + jqXHR.responseJSON.message);
+        });
+
     }
 
     // 게시글 좋아요 기능
@@ -283,6 +346,7 @@
     $('.modalCloseButton').click(function () {
         // id="modal_box_add", id="modal_box_view" 요소와 class="modal_bg" 요소를 서서히 감춘다.
         $('#modal_box_view').fadeOut();
+        $('#modal_box_board_update').fadeOut();
         $('.modal_bg').fadeOut();
     });
 

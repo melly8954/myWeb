@@ -205,7 +205,14 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
-    public BoardDto update(CUDInfoDto cudInfoDto, BoardDto dto) {
-        return null;
+    public BoardDto update(CUDInfoDto cudInfoDto, BoardDto boardDto) {
+        if ( cudInfoDto == null || boardDto == null ) {
+            return null;
+        }
+        BoardDto update = BoardDto.builder().build();
+        update.copyFields(boardDto);
+        cudInfoDto.setUpdateInfo(update);
+        this.boardMybatisMapper.update(update);
+        return update;
     }
 }
