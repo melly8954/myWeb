@@ -38,7 +38,7 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
                                                             @RequestPart(value="files", required = false) List<MultipartFile> files) {
         try{
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
-            BoardDto insert = this.boardService.insert(cudInfoDto,boardDto);
+            BoardDto insert = this.boardService.insert(cudInfoDto,boardDto,files);
             return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",insert);
         }catch (LoginAccessException ex){
             log.error(ex.toString());

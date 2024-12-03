@@ -1,5 +1,9 @@
 package com.melly.myweb.board;
 
+import com.melly.myweb.board.file.BoardFileDto;
+import com.melly.myweb.board.file.IBoardFile;
+import com.melly.myweb.board.file.IBoardFileMybatisMapper;
+import com.melly.myweb.board.file.IBoardFileService;
 import com.melly.myweb.board.like.BoardLikeDto;
 import com.melly.myweb.board.like.IBoardLikeMybatisMapper;
 import com.melly.myweb.commons.dto.SearchQueryDto;
@@ -9,6 +13,7 @@ import com.melly.myweb.commons.dto.CUDInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,12 +21,15 @@ import java.util.List;
 public class BoardServiceImpl implements IBoardService {
     @Autowired
     private IBoardMybatisMapper boardMybatisMapper;
-
     @Autowired
     private IBoardLikeMybatisMapper boardLikeMybatisMapper;
+    @Autowired
+    private IBoardFileMybatisMapper boardFileMybatisMapper;
+    @Autowired
+    private IBoardFileService boardFileService;
 
-    @Override
-    public BoardDto insert(CUDInfoDto info, BoardDto boardDto) throws RuntimeException {
+    @Transactional
+    public BoardDto insert(CUDInfoDto info, BoardDto boardDto, List<MultipartFile> files) throws RuntimeException {
         if ( info == null || boardDto == null ) {
             return null;
         }
@@ -29,11 +37,12 @@ public class BoardServiceImpl implements IBoardService {
         insert.copyFields(boardDto);
         info.setCreateInfo(insert);
         this.boardMybatisMapper.insert(insert);
+        this.boardFileService.insertFiles(insert, files);
         return insert;
     }
 
-    @Override
-    public BoardDto update(CUDInfoDto info, BoardDto boardDto) throws RuntimeException {
+    @Transactional
+    public BoardDto update(CUDInfoDto info, BoardDto boardDto, List<BoardFileDto> boardFileDtoList, List<MultipartFile> files) throws RuntimeException {
         if ( info == null || boardDto == null ) {
             return null;
         }
@@ -41,6 +50,8 @@ public class BoardServiceImpl implements IBoardService {
         update.copyFields(boardDto);
         info.setUpdateInfo(update);
         this.boardMybatisMapper.update(update);
+        this.boardFileService.updateFiles(boardFileDtoList);
+        this.boardFileService.insertFiles(update,files);
         return update;
     }
 
@@ -53,6 +64,16 @@ public class BoardServiceImpl implements IBoardService {
         delete.copyFields(boardDto);
         info.setDeleteInfo(delete);
         this.boardMybatisMapper.updateDeleteFlag(delete);
+        BoardFileDto boardFileDto= BoardFileDto.builder()
+                .tbl(boardDto.getTbl())
+                .boardId(boardDto.getId())
+                .build();
+        List<BoardFileDto> boardFileDtoList = this.boardFileMybatisMapper.findAllByTblBoardId(boardFileDto);
+        for( BoardFileDto result : boardFileDtoList){
+            result.setDeleteFlag(true);
+            this.boardFileMybatisMapper.updateDeleteFlag(result);
+            // this.fileCtrlService.deleteFile(sbFileDto.getTbl(), sbFileDto.getUniqName(), sbFileDto.getFileType());
+        }
         return true;
     }
 
@@ -176,4 +197,15 @@ public class BoardServiceImpl implements IBoardService {
 //        List<IBoard> result = list.stream().map(item -> (IBoard)item).toList();
 //        return result;
 //    }
+
+
+    @Override
+    public BoardDto insert(CUDInfoDto cudInfoDto, BoardDto dto) {
+        return null;
+    }
+
+    @Override
+    public BoardDto update(CUDInfoDto cudInfoDto, BoardDto dto) {
+        return null;
+    }
 }
