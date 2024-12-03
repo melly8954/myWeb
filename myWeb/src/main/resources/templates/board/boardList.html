@@ -389,7 +389,8 @@
             $.searchBoardList(1);
             $("#title").val("");
             $("#content").val("");
-
+            $(".modalCloseButton").trigger("click");
+            
         }).fail(function (jqXHR, status, errorThrown) {
             // ajax 의 요청이 실패하면 실행한다.
             // jqXHR : 부가 정보
