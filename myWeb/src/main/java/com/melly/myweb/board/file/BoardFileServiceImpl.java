@@ -2,6 +2,7 @@ package com.melly.myweb.board.file;
 
 import com.melly.myweb.board.IBoard;
 import com.melly.myweb.commons.dto.CUDInfoDto;
+import com.melly.myweb.commons.exception.IdNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,17 @@ public class BoardFileServiceImpl implements IBoardFileService {
         return result;
     }
 
+    @Override
+    public BoardFileDto findById(Long id) {
+        if (id == null || id <= 0) {
+            return null;
+        }
+        BoardFileDto find = this.boardFileMybatisMapper.findById(id);
+        if (find == null) {
+            throw new IdNotFoundException(String.format("Error : not found id = %d !", id));
+        }
+        return find;
+    }
 
 
 
@@ -120,8 +132,5 @@ public class BoardFileServiceImpl implements IBoardFileService {
         return null;
     }
 
-    @Override
-    public BoardFileDto findById(Long id) {
-        return null;
-    }
+
 }

@@ -3,6 +3,9 @@ package com.melly.myweb.board;
 
 import com.melly.myweb.board.comment.BoardCommentDto;
 import com.melly.myweb.board.comment.IBoardCommentService;
+import com.melly.myweb.board.file.BoardFileDto;
+import com.melly.myweb.board.file.IBoardFile;
+import com.melly.myweb.board.file.IBoardFileService;
 import com.melly.myweb.board.like.BoardLikeDto;
 import com.melly.myweb.board.like.IBoardLikeService;
 import com.melly.myweb.commons.dto.CUDInfoDto;
@@ -30,9 +33,10 @@ import java.util.List;
 public class BoardController implements IResponseController {
     @Autowired
     private IBoardService boardService;
-
     @Autowired
     private IBoardLikeService boardLikeService;
+    @Autowired
+    private IBoardFileService boardFileService;
 
     @GetMapping("/board_list")
     public String boardList(Model model,@ModelAttribute SearchQueryDto searchQueryDto) {
@@ -95,6 +99,16 @@ public class BoardController implements IResponseController {
             find.copyFields(find);
 
             model.addAttribute("boardView",find);
+
+            // 파일 조회
+            IBoardFile boardFile = BoardFileDto.builder()
+                    .tbl(new BoardDto().getTbl())
+                    .boardId(id)
+                    .build();
+            List<IBoardFile> files = this.boardFileService.findAllByTblBoardId(boardFile);
+
+            model.addAttribute("files", files);  // 파일 리스트 추가
+
         }catch (LoginAccessException ex){
             log.error(ex.toString());
         }catch (Exception ex){
