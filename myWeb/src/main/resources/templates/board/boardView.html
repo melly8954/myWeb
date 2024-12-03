@@ -209,13 +209,17 @@
             let likeQty = commentItem.likeQty;
             let createDt = commentItem.createDt;
             let createName = commentItem.createName;
-
+            const loggedInUser = "{{webUser.nickname}}";
             html += `<div id=commentList_${id} class="commentList">`;
             html += `<div>댓글 내용 :  ${comment}</div>`
             html += `<div>작성자 : ${createName}</div>`;
             html += `<div>작성일 : ${createDt}</div>`;
 
-            html += `<div class="updateBtn" onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>`;
+            if( createName == loggedInUser){
+                html += `<div class="updateBtn" onclick=$.showViewModalButton(${id})>댓글 수정</div><span class="deleteBtn" onclick=$.deleteComment(${id})>댓글 삭제(Ｘ)</span>
+                        </div>`;
+            }
+
             if ( commentId === undefined || commentId === null ) {
                 html += `<div>추천 누르기 <img id='commentLikeIcon_${id}' src='/svg/heartOff.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})>
                             <span id=likeListQty_${id}>추천 수 : ${likeQty}</span> </div>`;
@@ -223,11 +227,20 @@
                 html += `<div>추천 누르기 <img id='commentLikeIcon_${id}' src='/svg/heartOn.svg' width='20px' alt='Like' onClick=$.commentLikeItem(${id})>
                             <span id=likeListQty_${id}>추천 수 : ${likeQty}</span></div>`;
             }
+
             html += `</div>`;
         }
         $("#commentList").append(html);
     }
+    // 댓글 수정,삭제 버튼 여부
+    function showCommentBtns() {
+        const createName = "{{boardView.createName}}";
+        const loggedInUser = "{{webUser.nickname}}";
 
+        if (createName === loggedInUser) {
+            $("#modifyDeleteBtns").removeClass('hidden');
+        }
+    }
     // 댓글 수정
     $.updateComment = function (id) {
         if (id <= 0) {
