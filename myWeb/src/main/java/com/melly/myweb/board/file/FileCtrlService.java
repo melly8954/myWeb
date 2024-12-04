@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 @Service
 public class FileCtrlService {
 //    @Value("${spring.servlet.multipart.location}")
-    private String uploadDir = "/home/files";
+    private String uploadDir = "C:/psw/github/files";
 
     private void checkDirectory(String directory) throws IOException {
         // Path: 파일 시스템의 경로를 나타내는 객체
@@ -43,7 +43,7 @@ public class FileCtrlService {
         byte[] bytes = null;
         try{
             this.checkDirectory(uploadDir + "/" + tbl);
-            Path path = Paths.get(uploadDir + "/" + tbl + "/" + uniqName);
+            Path path = Paths.get(uploadDir + "/" + tbl + "/" + uniqName + fileType);
             bytes = Files.readAllBytes(path);
         }catch (IOException ex){
             log.error(ex.toString());
