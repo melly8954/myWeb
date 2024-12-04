@@ -53,6 +53,10 @@
                     <label for="content"> 본문 </label>
                     <textarea id="content" name="content"></textarea>
                 </div>
+                <div>
+                    <div>첨부파일 수정</div>
+                    <div><input type="file" id="fileModity" name="file" onchange="$.addFileModity(this);" multiple /></div>
+                </div>
             </div>
         </fieldset>
         <div class="row">
@@ -152,17 +156,23 @@
         if (!confirm(name + " 수정 하시겠습니까 ?")) {
             return;
         }
+        let formData = new FormData();
+        for ( const file of fileArrayModity ) {
+            formData.append("files", file);
+            // 기존 게시글에 첨부파일을 새로 추가하는 경우
+        }
+        formData.append("boardDto", new Blob([JSON.stringify({"id": id, "title": title, "content": content})], {type:"application/json"}));
+        // 기존 게시글의 제목과 본문의 수정한것
+        formData.append("boardFiles", new Blob([JSON.stringify(fileArrayView)], {type:"application/json"}));
+        // 기존 게시글의 첨부파일들에서 삭제여부 배열
 
         $.ajax({
             url: "/api/board/update/"+id,
             type: "PATCH",
             datatype: "JSON",
-            data: JSON.stringify({
-                "id" : id,
-                "title": title,
-                "content": content
-            }),
-            contentType: "application/json; charset=UTF-8",
+            data: formData,
+            contentType: false,
+            processData: false,
         }).done(function (data, status, xhr) {
             console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
             $(".modalCloseButton").trigger("click");
@@ -174,6 +184,21 @@
             alert("실패 했습니다. " + jqXHR.responseJSON.message);
         });
 
+    }
+
+    // 게시글 수정시 파일추가
+    $.addFileModity = function(inputFile) {
+        let num = 0;
+        for ( const file of inputFile.files ) {
+            let html = "";
+            html += "<div id='fileView_" + num + "' class='filebox'>";
+            html += "<div class='filename'>" + file.name + "</div>";
+            html += "</div>";
+            $("#fileListView").append(html);
+            fileArrayModity.push(file);
+            num--;
+        }
+        $("#fileModity").val("");
     }
 
     // 게시글 좋아요 기능

@@ -52,14 +52,16 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
 
     @PatchMapping("update/{id}")
     public ResponseEntity<ResponseDto> update(Model model, @Validated @PathVariable("id") Long id
-                                            ,@Validated @RequestBody BoardDto boardDto){
+                                            , @Validated @RequestPart(value="boardDto") BoardDto boardDto
+                                            , @RequestPart(value="boardFiles", required = false) List<BoardFileDto> boardFileDtoList
+                                            , @RequestPart(value="files", required = false) List<MultipartFile> files){
         try{
             if( id == null || boardDto == null || boardDto.getId() == null || boardDto.getId() <= 0
             || !id.equals(boardDto.getId()) ){
                 return makeResponseEntity(HttpStatus.BAD_REQUEST,ResponseCode.R000051,"입력 매개변수 에러",null);
             }
             CUDInfoDto cudInfoDto = makeResponseCheckLogin(model);
-            BoardDto result = this.boardService.update(cudInfoDto,boardDto);
+            BoardDto result = this.boardService.update(cudInfoDto,boardDto,boardFileDtoList,files);
             return makeResponseEntity(HttpStatus.OK,ResponseCode.R000000,"성공",result);
         }catch (LoginAccessException ex) {
             log.error(ex.toString());
@@ -200,6 +202,11 @@ public class BoardRestController implements ICommonRestController<BoardDto> {
     // 사용하지 않을 오버라이딩 메서드들
     @Override
     public ResponseEntity<ResponseDto> insert(Model model, BoardDto dto) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto> update(Model model, Long id, BoardDto dto) {
         return null;
     }
 
