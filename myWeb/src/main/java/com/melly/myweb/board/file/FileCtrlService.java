@@ -1,7 +1,7 @@
 package com.melly.myweb.board.file;
 
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +13,8 @@ import java.nio.file.Paths;
 @Slf4j
 @Service
 public class FileCtrlService {
-//    @Value("${spring.servlet.multipart.location}")
-    private String uploadDir = "C:/psw/github/files";
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadDir;
 
     private void checkDirectory(String directory) throws IOException {
         // Path: 파일 시스템의 경로를 나타내는 객체
