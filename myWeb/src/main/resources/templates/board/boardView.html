@@ -53,8 +53,12 @@
                     <label for="content"> 본문 </label>
                     <textarea id="content" name="content"></textarea>
                 </div>
-                <div>
-                    <div id="fileListView" class="file_list"></div>
+                <div id="modal_box_file">
+                    {{#files}}
+                    <ul>
+                        <li id="file_{{id}}">{{name}}</li>
+                    </ul>
+                    {{/files}}
                 </div>
                 <div>
                     <div>첨부파일 추가</div>
@@ -153,6 +157,15 @@
 
     // 게시글 파일 업데이트 변수
     let fileArrayView = new Array();
+    {{#files}}
+    // 각 파일 객체를 fileArrayView에 추가
+    fileArrayView.push({
+        id: {{id}},
+        name: '{{name}}',  // 문자열일 경우 따옴표 처리
+        deleteFlag: {{deleteFlag}}
+    });
+    {{/files}}
+
     let fileArrayAdd = new Array();
 
     // 게시글 업데이트
@@ -168,8 +181,14 @@
             formData.append("files", file);
             // 기존 게시글에 첨부파일을 새로 추가하는 경우
         }
-        formData.append("boardDto", new Blob([JSON.stringify({"id": id, "title": title, "content": content})], {type:"application/json"}));
+
+        formData.append("boardDto", new Blob([JSON.stringify({"id": id, "title": title, "content": content})], {type:"application/json"}))
+
         // 기존 게시글의 제목과 본문의 수정한것
+        for ( const file of fileArrayView ) {
+            formData.append("files", file);
+            // 기존 게시글에 첨부파일을 새로 추가하는 경우
+        }
 
         $.ajax({
             url: "/api/board/update/"+id,
@@ -198,17 +217,35 @@
 
     // 게시글 수정시 파일추가
     $.file_add = function(inputFile) {
-        let num = 0;
+        // file id를 대신 사용할 num
         for ( const file of inputFile.files ) {
             let html = "";
-            html += "<div id='fileView_" + num + "' class='filebox'>";
-            html += "<div class='filename'>" + file.name + "</div>";
+            html += `<div>>`;
+            html += `${file.name}<button onClick="$.file_delete(${file.name};)">삭제하기</button>`;
             html += "</div>";
-            $("#fileListView").append(html);
-            fileArrayModity.push(file);
-            num--;
+            $(`#modal_box_file`).append(html);
+            fileArrayAdd.push(file);
+            num++;
         }
         $("#file_add").val("");
+    }
+
+    // 게시글 수정 시 파일 삭제
+    $.file_delete = function (name) {
+        if(fileArrayView != null){
+            for (const file of fileArrayView) {
+                console.log("삭제하려는 파일 ID:", id);
+                for (const file of fileArrayView) {
+                    if (name === file.name) {
+                        file.deleteFlag = true;
+                        console.log("파일 삭제 처리:", file);
+                        // li 태그를 삭제
+                        $("#file_" + id).remove();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     // 게시글 좋아요 기능
