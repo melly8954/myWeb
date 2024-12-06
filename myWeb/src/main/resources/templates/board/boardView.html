@@ -134,6 +134,8 @@
     });
     {{/files}}
 
+    let fileArrayAdd = new Array();
+
 
     // 게시글 수정 삭제 버튼 존재 여부
     function setCreateUserByButton() {
@@ -174,8 +176,6 @@
     }
 
 
-    let fileArrayAdd = new Array();
-
     // 게시글 업데이트
     $.board_update = function (){
         let id = {{boardView.id}};
@@ -186,17 +186,11 @@
         }
         let formData = new FormData();
         for ( const file of fileArrayAdd ) {
-            formData.append("files", file);
+            formData.append("newFiles", file);
             // 기존 게시글에 첨부파일을 새로 추가하는 경우
         }
-
         formData.append("boardDto", new Blob([JSON.stringify({"id": id, "title": title, "content": content})], {type:"application/json"}))
-
-        // 기존 게시글의 제목과 본문의 수정한것
-        for ( const file of fileArrayView ) {
-            formData.append("files", file);
-            // 기존 게시글에 첨부파일을 새로 추가하는 경우
-        }
+        formData.append("boardFiles", new Blob([JSON.stringify(fileArrayView)], {type:"application/json"}));
 
         $.ajax({
             url: "/api/board/update/"+id,
@@ -207,8 +201,8 @@
             processData: false,
         }).done(function (data, status, xhr) {
             console.log("done:data=" + data + ", status=", status, ", xhr=", xhr);
-            fileArrayAdd = new Array();
-            $("#fileListView").children().remove();
+            // update 성공 완료시
+            $("#show_add_newFile").children().remove();
             window.location.href=`/board/board_view?id=${data.responseData.id}`;
             $("#title").val("");
             $("#content").val("");

@@ -7,7 +7,6 @@ import com.melly.myweb.commons.inif.IServiceCRUD;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.IOException;
 import java.util.List;
 
 public interface IBoardService extends IServiceCRUD<BoardDto> {
@@ -20,6 +19,6 @@ public interface IBoardService extends IServiceCRUD<BoardDto> {
     void subLikeQty(CUDInfoDto cudInfoDto, Long id);
 
     BoardDto insert(CUDInfoDto info, BoardDto dto, List<MultipartFile> files) throws RuntimeException;
-    BoardDto update(CUDInfoDto info, BoardDto dto, List<BoardFileDto> boardFileDtoList, List<MultipartFile> files) throws RuntimeException;
+    BoardDto update(CUDInfoDto info, BoardDto dto, List<BoardFileDto> boardFileDtoList, List<MultipartFile> newFiles) throws RuntimeException;
 
 }

@@ -42,7 +42,7 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Transactional
-    public BoardDto update(CUDInfoDto info, BoardDto boardDto, List<BoardFileDto> boardFileDtoList, List<MultipartFile> files) throws RuntimeException {
+    public BoardDto update(CUDInfoDto info, BoardDto boardDto, List<BoardFileDto> boardFileDtoList, List<MultipartFile> newFiles) throws RuntimeException {
         if ( info == null || boardDto == null ) {
             return null;
         }
@@ -51,7 +51,7 @@ public class BoardServiceImpl implements IBoardService {
         info.setUpdateInfo(update);
         this.boardMybatisMapper.update(update);
         this.boardFileService.updateFiles(boardFileDtoList);
-        this.boardFileService.insertFiles(update,files);
+        this.boardFileService.insertFiles(update,newFiles);
         return update;
     }
 
