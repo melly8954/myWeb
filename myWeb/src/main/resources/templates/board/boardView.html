@@ -53,16 +53,12 @@
                     <label for="content"> 본문 </label>
                     <textarea id="content" name="content"></textarea>
                 </div>
-                <div id="modal_box_file">
-                    {{#files}}
-                    <ul>
-                        <li id="file_{{id}}">{{name}}</li>
-                    </ul>
-                    {{/files}}
-                </div>
+                <div id="modal_box_file"></div>
                 <div>
                     <div>첨부파일 추가</div>
-                    <div><input type="file" id="file_add" name="file" onchange="$.file_add(this);" multiple /></div>
+                    <div><input type="file" id="file_add" name="file_add" onchange="$.file_add(this);" multiple /></div>
+                </div>
+                <div id="show_add_newFile">
                 </div>
             </div>
         </fieldset>
@@ -120,11 +116,24 @@
 
         let id = {{boardView.id}};
         $.getBoardCommentList(id);
+
     });
 
     const goBack = () => {
         history.back();
     }
+
+    // 게시글 파일 업데이트 변수
+    let fileArrayView = new Array();
+    {{#files}}
+    // 각 파일 객체를 fileArrayView에 추가
+    fileArrayView.push({
+        id: {{id}},
+        name: '{{name}}',  // 문자열일 경우 따옴표 처리
+        deleteFlag: {{deleteFlag}}
+    });
+    {{/files}}
+
 
     // 게시글 수정 삭제 버튼 존재 여부
     function setCreateUserByButton() {
@@ -148,6 +157,7 @@
     $.showModalBoardUpdate = function (commentId){
         // id="modal_box_view" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
         $('#modal_box_board_update').fadeIn(1000);
+        show_boardFiles();
         $('.modal_bg').fadeIn(1000);
 
         // if (confirm(id+"번 게시글을 수정 하시겠습니까 ?")) {
@@ -155,16 +165,14 @@
         // }
     };
 
-    // 게시글 파일 업데이트 변수
-    let fileArrayView = new Array();
-    {{#files}}
-    // 각 파일 객체를 fileArrayView에 추가
-    fileArrayView.push({
-        id: {{id}},
-        name: '{{name}}',  // 문자열일 경우 따옴표 처리
-        deleteFlag: {{deleteFlag}}
-    });
-    {{/files}}
+    function show_boardFiles(){
+        for(const files of fileArrayView){
+            let html="";
+            html+=`<div id="file_${files.id}"><span>${files.name}</span><button onclick="file_delete(${files.id})">삭제하기</button></div>`;
+            $("#modal_box_file").append(html);
+        }
+    }
+
 
     let fileArrayAdd = new Array();
 
@@ -215,38 +223,49 @@
 
     }
 
-    // 게시글 수정시 파일추가
+    // 게시글 수정 시 파일추가
     $.file_add = function(inputFile) {
-        // file id를 대신 사용할 num
-        for ( const file of inputFile.files ) {
+        let num = 0;
+        for ( const newFile of inputFile.files ) {
+            let fileId = `newFile_${num}`; // 고유 ID 생성
             let html = "";
-            html += `<div>>`;
-            html += `${file.name}<button onClick="$.file_delete(${file.name};)">삭제하기</button>`;
-            html += "</div>";
-            $(`#modal_box_file`).append(html);
-            fileArrayAdd.push(file);
+
+            html += `<div id="${fileId}">`;  // div의 ID에 고유 ID 삽입
+            html += `<div>${newFile.name} <button onclick="newFile_delete('${fileId}')">삭제하기</button></div>`;
+            html += `</div>`;
+
+            $("#show_add_newFile").append(html);
+
+            // newFile에 id를 포함시키는 부분
+            newFile.id = fileId;  // newFile 객체에 id 속성 추가
+
+            fileArrayAdd.push(newFile);
             num++;
         }
         $("#file_add").val("");
     }
 
-    // 게시글 수정 시 파일 삭제
-    $.file_delete = function (name) {
-        if(fileArrayView != null){
-            for (const file of fileArrayView) {
-                console.log("삭제하려는 파일 ID:", id);
-                for (const file of fileArrayView) {
-                    if (name === file.name) {
-                        file.deleteFlag = true;
-                        console.log("파일 삭제 처리:", file);
-                        // li 태그를 삭제
-                        $("#file_" + id).remove();
-                        break;
-                    }
+
+    // 게시글 수정 시 기존의 파일 삭제 할 경우
+    function file_delete(id){
+        fileArrayView = fileArrayView
+            .map(file => {
+                // 파일의 deleteFlag를 true로 설정
+                if (file.id === id) {
+                    file.deleteFlag = true;
                 }
-            }
-        }
+                return file;
+            })
+            .filter(file => file.id !== id);  // id가 일치하는 파일은 필터링해서 제거
+        $(`#file_${id}`).remove();
     }
+
+    // 게시글 수정 시 파일을 추가 하고 다시 삭제 할 경우
+    function newFile_delete(fileId){
+        fileArrayAdd = fileArrayAdd.filter(newFile => newFile.id !== fileId);  // fileId를 기준으로 파일 삭제
+        $(`#${fileId}`).remove();  // DOM에서 해당 파일 삭제
+    }
+
 
     // 게시글 좋아요 기능
     $.likeItem = function (){
