@@ -250,7 +250,6 @@
                 }
                 return file;
             })
-            .filter(file => file.id !== id);  // id가 일치하는 파일은 필터링해서 제거
         $(`#file_${id}`).remove();
     }
 
