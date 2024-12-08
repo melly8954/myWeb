@@ -156,8 +156,11 @@
     }
 
     // 게시글 업데이트_모달창 보여주기
-    $.showModalBoardUpdate = function (commentId){
-        // id="modal_box_view" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
+    $.showModalBoardUpdate = function (){
+        let title = "{{boardView.title}}";
+        let content = "{{boardView.content}}";
+        $("#title").val(title);
+        $("#content").val(content);
         $('#modal_box_board_update').fadeIn(1000);
         show_boardFiles();
         $('.modal_bg').fadeIn(1000);
@@ -168,8 +171,9 @@
     };
 
     function show_boardFiles(){
+        $("#modal_box_file").empty(); // 기존 내용 제거
+        let html="";
         for(const files of fileArrayView){
-            let html="";
             html+=`<div id="file_${files.id}"><span>${files.name}</span><button onclick="file_delete(${files.id})">삭제하기</button></div>`;
             $("#modal_box_file").append(html);
         }
