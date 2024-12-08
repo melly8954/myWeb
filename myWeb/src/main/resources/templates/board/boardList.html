@@ -323,6 +323,10 @@
     }
 
     $('#showInsertModalButton').click(function () {
+        $("#title").val(""); // 기존 내용 제거
+        $("#content").val(""); // 기존 내용 제거
+        $("#fileListAdd").empty(); // 기존 내용 제거
+        fileArrayAdd = []; // 배열 초기화
         // id="modal_box_add" 요소와 class="modal_bg" 요소를 1000ms 동안 서서히 보여준다.
         $('#modal_box_insert').fadeIn(1000);
         $('.modal_bg').fadeIn();
@@ -343,17 +347,40 @@
     let fileArrayAdd = new Array();
 
     $.file_insert = function(inputFile) {
-        let num = 0;
-        for ( const file of inputFile.files ) {
-            let html = "";
-            html += `<div id='file ${num} ' class='filebox'>`;
-            html += `<div class='filename'> ${file.name} </div>`;
-            html += "</div>";
-            $("#fileListAdd").append(html);
-            fileArrayAdd.push(file);
-            num++;
+        const fileListContainer = $("#fileListAdd");
+        const files = inputFile.files;
+
+        for (const file of files) {
+            fileArrayAdd.push(file); // 파일 배열에 추가
+            const fileIndex = fileArrayAdd.length - 1; // 현재 파일 인덱스 계산
+
+            // 파일 DOM 추가
+            let html = `
+            <div id="file_${fileIndex}" class="file-container">
+                <div>
+                    ${file.name}
+                    <button type="button" onclick="file_delete(${fileIndex})">삭제하기</button>
+                </div>
+            </div>`;
+            fileListContainer.append(html);
         }
+
+        // 파일 입력란 초기화
         $("#file").val("");
+    };
+
+    // 파일 삭제 처리
+    function file_delete(index) {
+        fileArrayAdd.splice(index, 1); // 배열에서 파일 제거
+        $(`#file_${index}`).remove(); // DOM에서 파일 제거
+
+        // DOM 업데이트 및 ID 재정렬 (인덱스 맞추기)
+        $("#fileListAdd").children().each(function(i, element) {
+            $(element).attr("id", `file_${i}`); // ID 재설정
+            $(element)
+                .find("button")
+                .attr("onclick", `file_delete(${i})`); // 버튼의 onclick 이벤트 재설정
+        });
     }
 
     $.board_insert = function (){
