@@ -172,13 +172,22 @@
 
     function show_boardFiles(){
         $("#modal_box_file").empty(); // 기존 내용 제거
-        let html="";
-        for(const files of fileArrayView){
-            html+=`<div id="file_${files.id}"><span>${files.name}</span><button onclick="file_delete(${files.id})">삭제하기</button></div>`;
-            $("#modal_box_file").append(html);
+        for (const files of fileArrayView) {
+            $("#modal_box_file").append(`
+            <div id="file_${files.id}">
+                <span>${files.name}</span>
+                <button class="file-delete-btn" data-id="${files.id}">삭제하기</button>
+            </div>
+        `);
         }
     }
 
+    // 이벤트 위임 방식으로 버튼 클릭 처리
+    $(document).on("click", ".file-delete-btn", function (event) {
+        event.stopPropagation(); // 버블링 방지
+        const fileId = $(this).data("id");
+        file_delete(fileId);
+    });
 
     // 게시글 업데이트
     $.board_update = function (){
@@ -511,5 +520,8 @@
             alert("실패 했습니다. " + jqXHR.responseJSON.message);
         });
     }
+    $(document).on("click", "#modal_box_file", function () {
+        console.log("버블링 발생: 부모 클릭됨");
+    });
 </script>
 </html>
