@@ -164,10 +164,6 @@
         $('#modal_box_board_update').fadeIn(1000);
         show_boardFiles();
         $('.modal_bg').fadeIn(1000);
-
-        // if (confirm(id+"번 게시글을 수정 하시겠습니까 ?")) {
-        //     window.location.href = "/board/board_update_page?id=" + id;
-        // }
     };
 
     function show_boardFiles(){
@@ -194,7 +190,7 @@
         let id = {{boardView.id}};
         let title = $("#title").val();
         let content = $("#content").val();
-        if (!confirm(name + " 수정 하시겠습니까 ?")) {
+        if (!confirm( id + "번 게시글을 수정 하시겠습니까 ?")) {
             return;
         }
         let formData = new FormData();
