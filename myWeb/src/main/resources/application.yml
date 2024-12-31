@@ -1,5 +1,5 @@
 server:
-    port: 8089
+    port: 8088
     servlet:
         encoding:
             charset: UTF-8
@@ -9,14 +9,27 @@ server:
 spring:
     application:
         name: myWeb
-    profiles:
-        active: local
+#    profiles:
+#        active: local
 
 # mysql datetime 과 return datetime
     jackson:
         deserialization:
             adjust-dates-to-context-time-zone: false
         time-zone: Asia/Seoul
+
+    datasource:
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        url: jdbc:log4jdbc:mysql://localhost:3306/myWeb_db?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true
+        username: psw_web
+        password: web123123!
+
+    # attach file
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 10MB
+            location: C:/psw/github/files   # 자기 PC에 첨부파일 저장할때
 
 # mustache
     mustache:
@@ -31,5 +44,4 @@ mybatis:
     type-aliases-package: com.melly.myweb
     configuration:
         map-underscore-to-camel-case: true
-
 
